@@ -1,0 +1,71 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>DataGrid</title>
+        <meta name="description" content="Reuters Test">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="stylesheet" href="styles/screen.css">
+        <script src="scripts/vendor/f7f27360.modernizr.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div id="dialog">
+                <div class="bar">
+                    <p>DataGrid Control Panel</p>
+                </div>
+                <main>
+                    <header>
+                        <div class="logo">
+                            <h1>Data<span>Grid</span></h1>
+                        </div>
+                        <aside class="datagrid-aside">
+                            <ul>
+                                  <li><a href="/">FAQ</a></li>
+                                  <li><a href="/">Help</a></li>
+                              </ul>
+                        </aside>
+                    </header>
+                    <nav class="datagrid-nav">
+                        <ul class="datagrid-nav-items">
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/">Preview</a></li>
+                            <li><a href="/">Activity</a></li>
+                            <li><a href="/">Control</a></li>
+                            <li><a href="/">Issue</a></li>
+                            <li><a href="/">Overview</a></li>
+                            <li><a href="/">Admin</a></li>
+                            <li><a href="/">My Profile</a></li>
+                        </ul>
+                    </nav>
+                    <div id="datagrid">
+                        <table cellspacing="0" cellpadding="0">
+                            <!-- the thead would be generated via ajax/json if the headers were available in the .csv file. -->
+                            <thead>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'ticker')}">Ticker</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'industry')}">Industry</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'marketcap')}">Market Cap</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'price')}">Price</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'change')}">Change</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'volume')}">Volume</th>
+                            </thead>
+                            <tbody data-bind="foreach: {data : rows}, delegatedHandler: 'click'">
+                                <tr data-bind="css: {'odd': ($index() % 2 == 0), 'hilite' : hiliteClass }" data-click="hiliteRow">
+                                    <td data-bind="text: ticker"></td>
+                                    <td data-bind="text: industry"></td>
+                                    <td data-bind="text: marketcap"></td>
+                                    <td data-bind="text: price"></td>
+                                    <td data-bind="text: change, css: {'negative': !positiveChangeValue(), 'positive' : positiveChangeValue()}"></td>
+                                    <td data-bind="text: volume"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <script data-main="scripts/5ace429e.main" src="bower_components/requirejs/require.js"></script>
+</body>
+</html>
