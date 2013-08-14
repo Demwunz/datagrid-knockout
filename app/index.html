@@ -1,0 +1,82 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>DataGrid</title>
+        <meta name="description" content="Reuters Test.">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="stylesheet" href="styles/screen.css">
+        <!-- build:js scripts/vendor/modernizr.js -->
+        <script src="bower_components/modernizr/modernizr.js"></script>
+        <!-- endbuild -->
+    </head>
+    <body>
+        <div class="container">
+            <div id="dialog">
+                <div class="bar">
+                    <p>DataGrid Control Panel</p>
+                </div>
+                <main>
+                    <header>
+                        <div class="logo">
+                            <h1>Data<span>Grid</span></h1>
+                        </div>
+                        <aside>
+                            <ul>
+                                  <li><a href="/">FAQ</a></li>
+                                  <li><a href="/">Help</a></li>
+                              </ul>
+                        </aside>
+                    </header>
+                    <nav>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/">Preview</a></li>
+                            <li><a href="/">Activity</a></li>
+                            <li><a href="/">Control</a></li>
+                            <li><a href="/">Issue</a></li>
+                            <li><a href="/">Overview</a></li>
+                            <li><a href="/">Admin</a></li>
+                            <li><a href="/">My Profile</a></li>
+                        </ul>
+                    </nav>
+                    <div id="datagrid">
+                        <table cellspacing="0" cellpadding="0">
+                            <thead data-bind="">
+                                <th>Ticker</th>
+                                <th>Industry</th>
+                                <th>Market Cap</th>
+                                <th>Price</th>
+                                <th>Change</th>
+                                <th>Volume</th>
+                            </thead>
+                            <tbody>
+                                <tr data-bind="css: { 'even': ($index() % 2 == 0) }">
+                                    <td>ACIW</td>
+                                    <td>Technical &amp; System Software</td>
+                                    <td>1,837.49</td>
+                                    <td>&pound;47.04</td>
+                                    <td>1.01%</td>
+                                    <td>57,718.00</td>
+                                </tr>
+                                <tr class="even">
+                                    <td>ACIW</td>
+                                    <td>Technical &amp; System Software</td>
+                                    <td>1,837.49</td>
+                                    <td>&pound;47.04</td>
+                                    <td>1.01%</td>
+                                    <td>57,718.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <!-- build:js scripts/main.js -->
+        <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
