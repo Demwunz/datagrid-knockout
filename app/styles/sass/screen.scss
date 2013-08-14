@@ -120,6 +120,7 @@ thead{
   @include background-image(linear-gradient(#e9f1f7, #d9e7f1));
   border-left:1px solid #fff;
   border-top:1px solid #fff;
+  // display: block;
 }
 th{
   @extend %bold-font;
@@ -132,6 +133,11 @@ th{
     text-align:left;
   }
 }
+tbody{
+  // display: block;
+  // height:300px;
+  // overflow:auto;
+}
 tr.even{
   background-color:#f8f8f8;
 }
@@ -142,5 +148,11 @@ td{
   &:nth-child(1),
   &:nth-child(2){
     text-align:left;
+  }
+  &.positive{
+    color:green;
+  }
+  &.negative{
+    color:red;
   }
 }

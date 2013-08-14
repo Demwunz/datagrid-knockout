@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>DataGrid</title>
-        <meta name="description" content="Reuters Test.">
+        <meta name="description" content="Reuters Test">
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link rel="stylesheet" href="styles/screen.css">
@@ -23,15 +23,15 @@
                         <div class="logo">
                             <h1>Data<span>Grid</span></h1>
                         </div>
-                        <aside>
+                        <aside class="datagrid-aside">
                             <ul>
                                   <li><a href="/">FAQ</a></li>
                                   <li><a href="/">Help</a></li>
                               </ul>
                         </aside>
                     </header>
-                    <nav>
-                        <ul>
+                    <nav class="datagrid-nav">
+                        <ul class="datagrid-nav-items">
                             <li><a href="/">Home</a></li>
                             <li><a href="/">Preview</a></li>
                             <li><a href="/">Activity</a></li>
@@ -44,30 +44,23 @@
                     </nav>
                     <div id="datagrid">
                         <table cellspacing="0" cellpadding="0">
-                            <thead data-bind="">
-                                <th>Ticker</th>
-                                <th>Industry</th>
-                                <th>Market Cap</th>
-                                <th>Price</th>
-                                <th>Change</th>
-                                <th>Volume</th>
+                            <!-- the thead would be generated via ajax/json if the headers were available in the .csv file. -->
+                            <thead>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'ticker')}">Ticker</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'industry')}">Industry</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'marketcap')}">Market Cap</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'price')}">Price</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'change')}">Change</th>
+                                <th data-bind="event : {click  : sortRows.bind($root, 'volume')}">Volume</th>
                             </thead>
-                            <tbody>
-                                <tr data-bind="css: { 'even': ($index() % 2 == 0) }">
-                                    <td>ACIW</td>
-                                    <td>Technical &amp; System Software</td>
-                                    <td>1,837.49</td>
-                                    <td>&pound;47.04</td>
-                                    <td>1.01%</td>
-                                    <td>57,718.00</td>
-                                </tr>
-                                <tr class="even">
-                                    <td>ACIW</td>
-                                    <td>Technical &amp; System Software</td>
-                                    <td>1,837.49</td>
-                                    <td>&pound;47.04</td>
-                                    <td>1.01%</td>
-                                    <td>57,718.00</td>
+                            <tbody data-bind="foreach: {data : rows}, delegatedHandler: 'click'">
+                                <tr data-bind="css: {'odd': ($index() % 2 == 0), 'hilite' : hiliteClass }" data-click="hiliteRow">
+                                    <td data-bind="text: ticker"></td>
+                                    <td data-bind="text: industry"></td>
+                                    <td data-bind="text: marketcap"></td>
+                                    <td data-bind="text: price"></td>
+                                    <td data-bind="text: change, css: {'negative': !positiveChangeValue(), 'positive' : positiveChangeValue()}"></td>
+                                    <td data-bind="text: volume"></td>
                                 </tr>
                             </tbody>
                         </table>
