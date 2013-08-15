@@ -28,24 +28,23 @@ define([
                     error: function (err) {
                         console.log(err);
                     },
-                    success: function (resp) {
-                        processResponse(resp.feed);
+                    success: function (response) {
+                        processResponse(response.feed);
                     }
                 });
-            };
 
-            var processResponse = function(response){
-                var responseModifiedDate = response.updated.$t;
-                if(responseModifiedDate != lastUpdated){
-                    lastUpdated = responseModifiedDate;
-                    updateData(response.entry);
-                }
-            };
-
-            var updateData = function(entries){
-                entries.forEach(function(entry){
-                    self.rows.push(new DataRow(entry));
-                });
+                var processResponse = function(response){
+                    var responseModifiedDate = response.updated.$t;
+                    if(responseModifiedDate != lastUpdated){
+                        lastUpdated = responseModifiedDate;
+                        updateData(response.entry);
+                    }
+                };
+                var updateData = function(entries){
+                    entries.forEach(function(entry){
+                        self.rows.push(new DataRow(entry));
+                    });
+                };
             };
 
             var hiliteRow = function(row){
