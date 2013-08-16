@@ -16,26 +16,26 @@ define([
             self.rows = ko.observableArray([]);
             
             var DataGridCell = function(cell){
-                var that = this;
                 //only store the data we're going to work with
-                that.text = cell.$t;
-                that.column = cell.col;
+                this.text = cell.$t;
+                this.column = cell.col;
                 if(cell.numericValue){
-                    that.numericValue = cell.numericValue;
+                    this.numericValue = cell.numericValue;
                 }
             };
             
             var DataGridRow = function(){};
     
             DataGridRow.prototype.getValue = function(column){
-                var cell = this[column];
+                var cell = this[column],
+                    numericValue = cell.numericValue;
                 // determine if the cell is numeric
-                if(cell.numericValue){
+                if(numericValue){
                     //is it a floating point integer? (regex stolen from elsewhere)
-                    if(cell.numericValue.match(/^[-+]?[0-9]+\.[0-9]+$/)){
-                        return parseFloat(cell.numericValue);
+                    if(numericValue.match(/^[-+]?[0-9]+\.[0-9]+$/)){
+                        return parseFloat(numericValue);
                     } else{
-                        return parseInt(cell.numericValue, 10);
+                        return parseInt(numericValue, 10);
                     } 
                 } else {
                     //must be a string
@@ -56,8 +56,8 @@ define([
                         console.log(err);
                     },
                     success: function (response) {
-                        rowCount = parseInt(response.feed.gs$rowCount.$t),
-                        colCount = parseInt(response.feed.gs$colCount.$t);
+                        rowCount = response.feed.gs$rowCount.$t;
+                        colCount = response.feed.gs$colCount.$t;
                         setRows(response.feed.entry);
                     }
                 });
