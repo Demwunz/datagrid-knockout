@@ -6,34 +6,43 @@ define([
     ],
     function (reqwest, ko) {
         'use strict';
-        var gsData, rowCount, colCount;
 
-        var DataGridCell = function(data){
+        var DataGridCell = function(cell){
             var self = this;
-            self.text = data.$t;
-            self.column = data.column;
-            if(data.numericValue){
-                self.numericValue = data.numericValue;
+            //only store the data we're going to work with
+            self.text = cell.$t;
+            self.column = cell.col;
+            if(cell.numericValue){
+                self.numericValue = cell.numericValue;
             }
         };
 
         DataGridCell.prototype.getValue = function(){
+            // determine if the cell is numeric
             if(this.numericValue){
-                 return parseFloat(this.numericValue);
-            } else{
-                return this.$t;
+                //is it a floating point integer? (regex stolen from elsewhere)
+                if(this.numericValue.match(/^[-+]?[0-9]+\.[0-9]+$/)){
+                    return parseFloat(this.numericValue);
+                } else{
+                    return parseInt(this.numericValue, 10);
+                } 
+            } else {
+                //must be a string
+                return this.text;
             }
         };
 
-        var DataGridViewModel = function(__DATASOURCE){
-            var self = this;
-
+        var DataGridViewModel = function(datasource){
+            var self = this,
+                rowCount, colCount;
+            
             self.headers = [];
-            self.rows = [];
-
+            self.rows = ko.observableArray([]);
+            
+            //self invoke the ajax call, we need the data asap.
             (function getData(){
                 reqwest({
-                    url: __DATASOURCE,
+                    url: datasource,
                     type: 'json',
                     method: 'get',
                     contentType: 'application/json',
@@ -43,37 +52,33 @@ define([
                         console.log(err);
                     },
                     success: function (response) {
-                        gsData = response.feed;
-                        rowCount = parseInt(gsData.gs$rowCount.$t),
-                        colCount = parseInt(gsData.gs$colCount.$t);
-                        var row = {};
-                        var rowCells = colCount;
-                        var tbody = parseInt(rowCount - 1);
-                        while(rowCells--){
-                            row[rowCells + 1] = null;
-                        };
-                        while(tbody--){
-                            self.rows.push(row);
-                        };
-                        createTable(gsData.entry);
+                        rowCount = parseInt(response.feed.gs$rowCount.$t),
+                        colCount = parseInt(response.feed.gs$colCount.$t);
+                        setRows(response.feed.entry);
                     }
                 });
             })();
 
-            var createTable = function(cells){
-                cells.forEach(function(cell, index, array){
-                    if(index < colCount){
-                        self.headers.push(cell.gs$cell);
+            var setRows = function(cells){
+                var rowsArray = [];
+                //go over each cell and determine where to put it
+                cells.forEach(function(cell, index){
+                    //if its less then the column count, must be the header (first row)
+                    if(index < colCount) {
+                        self.headers.push({title: cell.$t, column : cell.col});
                     } else {
-                        createRows(cell.gs$cell);
-                    }
+                        //create a row if it doesnt already exist
+                        if(!rowsArray[cell.row].length) {                        
+                            rowsArray.push([]);
+                        }
+                        //push the cell into the array
+                        rowsArray[cell.row].push(new DataGridCell(cell));
+                    }    
                 });
+                //once the custom Array is built, populate the UI
+                self.rows(rowsArray);
             };
 
-            var createRows = function(cell){
-                console.log(self.rows[cell.row][cell.col]);
-                // self.rows[cell.row][cell.col] = new DataGridCell(cell);
-            };
 
             self.sortRows = function(){
                 self.rows.sort(function(a,b) {
@@ -87,7 +92,6 @@ define([
                     }
                 });
             };
-
         };
         return DataGridViewModel;
     }
