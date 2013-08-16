@@ -8,7 +8,7 @@ define([
         var DataGridRow = function(rowData){
             var self = this;
             self.hiliteClass = ko.observable(false);
-            self.id = rowData.id.$t.split('/values/')[1];
+            self.id = rowData.id.$t;
             self.updated = rowData.updated.$t;
             self.ticker = rowData.gsx$ticker.$t;
             self.industry = rowData.gsx$industry.$t;
@@ -16,28 +16,28 @@ define([
             self.price = rowData.gsx$price.$t;
             self.change = rowData.gsx$change.$t;
             self.volume = rowData.gsx$volume.$t;
+        };
 
-            self.getTicker = function(){
-                return self.ticker;
-            };
-            self.getIndustry = function(){
-                return self.industry;
-            };
-            self.getMarketcap = function(){
-                return parseFloat(self.marketcap);
-            };
-            self.getPrice = function(){
-                return parseFloat(self.price.split('£')[1]);
-            };
-            self.getChange = function(){
-                return parseFloat(self.change.split('%')[0]);
-            };
-            self.getVolume = function(){
-                return parseInt(self.volume, 10);
-            };
-            self.positiveChangeValue = function(){
-                return this.getChange() >= 0;
-            };
+        DataGridRow.prototype.getTicker = function(){
+            return this.ticker;
+        };
+        DataGridRow.prototype.getIndustry = function(){
+            return this.industry;
+        };
+        DataGridRow.prototype.getMarketcap = function(){
+            return parseFloat(this.marketcap);
+        };
+        DataGridRow.prototype.getPrice = function(){
+            return parseFloat(this.price.split('£')[1]);
+        };
+        DataGridRow.prototype.getChange = function(){
+            return parseFloat(this.change.split('%')[0]);
+        };
+        DataGridRow.prototype.getVolume = function(){
+            return parseInt(this.volume, 10);
+        };
+        DataGridRow.prototype.positiveChangeValue = function(){
+            return this.getChange() >= 0;
         };
 
         return DataGridRow;

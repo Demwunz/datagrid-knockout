@@ -1,26 +1,27 @@
-/* Welcome to Compass.
- * In this file you should write your main styles. (or centralize your imports)
- * Import this file using the following HTML or equivalent:
- * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 @import "compass";
 
 $light-blue: #e1edf4;
 $light-grey:#c5c5c5;
 $orange:#d80;
+
 %bold-font{
   @include text-shadow(#fff 1px 1px 0);
-  color:#767f85;
   font-weight:700;
-  font-size:.8rem;
   text-decoration: none;
 }
 html{
   font-family: Tahoma, Verdana, Segoe, sans-serif;
-  font-size:1rem;
+  font-size:.75rem;
+  color:#767f85;
 }
 body{
   background: image-url('bg.jpg') no-repeat center center fixed;
   @include background-size(cover);
+}
+a,
+a:link,
+a:visited{
+  color:#767f85;
 }
 .container{
   @include display-box;
@@ -38,41 +39,40 @@ body{
   width:1045px;
   padding-bottom:1px;
 }
-.bar{
+.datagrid-bar{
   @include border-top-radius(5px);
   border:1px solid #fff;
   border-bottom-color:$light-grey;
-  font-size:.8rem;
   padding:8px;
   p{
     margin:0;
   }
 }
-main{
+.datagrid-main{
   background:#fff;
   border:1px solid $light-grey;
   margin:3px;
   padding:21px;
 }
-h1{
+.datagrid-logo{
   margin:0;
   text-transform: uppercase;
   span{
     color:$orange;
   }
 }
-nav{
+.datagrid-nav{
   @include border-radius(3px);
   @include background-image(linear-gradient(#f6f6f6, #eef0f0));
   border:1px solid #cacad2;
   margin:30px 0 20px;
-  ul{
+  .datagrid-nav-items{
     list-style: none;
     margin:0;
     padding:0;
     overflow: hidden;
   }
-  li{
+  .datagrid-nav-item{
     display: inline;
     float:left;
     margin:0;
@@ -111,43 +111,75 @@ nav{
     }
   }
 }
-table{
-  @include border-radius(3px);
-  border:1px solid #cacad2;
-  width:100%;
+.datagrid-header{
+  overflow: hidden;
+  > div{
+    float:left;
+  }
 }
-thead{
+.datagrid-aside{
+  float:right;
+  overflow: hidden;
+}
+.datagrid-global-links{
+  overflow: hidden;
+  float:left;
+  margin:0;
+  padding:0;
+  list-style: none;
+}
+.datagrid-global-link{
+  float:left;
+  &:first-child a{
+    border-right:1px solid lighten(#767f85, 20%);
+  }
+  a{
+    text-decoration:none;
+    padding:8px;
+  }
+}
+.datagrid-table{
+    @include border-radius(3px);
+    border:1px solid #cacad2;
+    width:100%;
+}
+.datagrid-table-head{
   @include background-image(linear-gradient(#e9f1f7, #d9e7f1));
   border-left:1px solid #fff;
   border-top:1px solid #fff;
-  // display: block;
 }
-th{
+.datagrid-table-head-cell{
   @extend %bold-font;
   padding:10px;
+  text-align:right;
   &:hover{
     color:$orange;
-  }
-  &:nth-child(1),
-  &:nth-child(2){
-    text-align:left;
+    cursor:default;
   }
 }
-tbody{
-  // display: block;
-  // height:300px;
-  // overflow:auto;
+.datagrid-table-body{
 }
-tr.even{
-  background-color:#f8f8f8;
+.datagrid-table-row{
+    &:after{
+        content: '';
+        display: block;
+        visibility: hidden;
+        clear: both;
+    }
+    &:hover{
+      background-color:darken(#f8f8f8, 5%);
+    }
+    &:nth-child(even){
+      background-color:#f8f8f8;
+    }
 }
-td{
-  font-size:.8rem;
-  padding:10px;
-  text-align:center;
-  &:nth-child(1),
-  &:nth-child(2){
+.datagrid-table-cell{
+  padding:10px 10px 10px 0;
+  text-align:right;
+  &.ticker,
+  &.industry{
     text-align:left;
+    padding:10px 0 10px 10px;
   }
   &.positive{
     color:green;

@@ -8,59 +8,57 @@
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link rel="stylesheet" href="styles/screen.css">
-        <!-- build:js scripts/vendor/modernizr.js -->
-        <script src="bower_components/modernizr/modernizr.js"></script>
-        <!-- endbuild -->
+        <script>document.documentElement.classList.add('js');</script>
     </head>
     <body>
         <div class="container">
             <div id="dialog">
-                <div class="bar">
+                <div  class="datagrid-bar">
                     <p>DataGrid Control Panel</p>
                 </div>
-                <main>
-                    <header>
-                        <div class="logo">
-                            <h1>Data<span>Grid</span></h1>
+                <main class="datagrid-main">
+                    <header class="datagrid-header">
+                        <div>
+                            <h1 class="datagrid-logo">Data<span>Grid</span></h1>
                         </div>
                         <aside class="datagrid-aside">
-                            <ul>
-                                  <li><a href="/">FAQ</a></li>
-                                  <li><a href="/">Help</a></li>
-                              </ul>
+                            <ul class="datagrid-global-links">
+                                <li class="datagrid-global-link"><a href="/">FAQ</a></li>
+                                <li class="datagrid-global-link"><a href="/">Help</a></li>
+                            </ul>
+                            <input type="search" placeholder="search" results="5"></input>
                         </aside>
                     </header>
                     <nav class="datagrid-nav">
                         <ul class="datagrid-nav-items">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/">Preview</a></li>
-                            <li><a href="/">Activity</a></li>
-                            <li><a href="/">Control</a></li>
-                            <li><a href="/">Issue</a></li>
-                            <li><a href="/">Overview</a></li>
-                            <li><a href="/">Admin</a></li>
-                            <li><a href="/">My Profile</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Home</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Preview</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Activity</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Control</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Issue</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Overview</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Admin</a></li>
+                            <li class="datagrid-nav-item"><a href="/">My Profile</a></li>
                         </ul>
                     </nav>
                     <div id="datagrid">
-                        <table cellspacing="0" cellpadding="0">
-                            <!-- the thead would be generated via ajax/json if the headers were available in the .csv file. -->
-                            <thead>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'ticker')}">Ticker</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'industry')}">Industry</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'marketcap')}">Market Cap</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'price')}">Price</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'change')}">Change</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'volume')}">Volume</th>
+                        <table cellspacing="0" cellpadding="0" class="datagrid-table">
+                            <thead class="datagrid-table-head">
+                                <th class="datagrid-table-head-cell ticker" data-bind="event : {click  : sortRows.bind($root, 'getTicker')}">Ticker</th>
+                                <th class="datagrid-table-head-cell industry" data-bind="event : {click  : sortRows.bind($root, 'getIndustry')}">Industry</th>
+                                <th class="datagrid-table-head-cell marketcap" data-bind="event : {click  : sortRows.bind($root, 'getMarketcap')}">Market Cap</th>
+                                <th class="datagrid-table-head-cell price" data-bind="event : {click  : sortRows.bind($root, 'getPrice')}">Price</th>
+                                <th class="datagrid-table-head-cell change" data-bind="event : {click  : sortRows.bind($root, 'getChange')}">Change</th>
+                                <th class="datagrid-table-head-cell volume" data-bind="event : {click  : sortRows.bind($root, 'getVolume')}">Volume</th>
                             </thead>
-                            <tbody data-bind="foreach: {data : rows}, delegatedHandler: 'click'">
-                                <tr data-bind="css: {'odd': ($index() % 2 == 0), 'hilite' : hiliteClass }" data-click="hiliteRow">
-                                    <td data-bind="text: ticker"></td>
-                                    <td data-bind="text: industry"></td>
-                                    <td data-bind="text: marketcap"></td>
-                                    <td data-bind="text: price"></td>
-                                    <td data-bind="text: change, css: {'negative': !positiveChangeValue(), 'positive' : positiveChangeValue()}"></td>
-                                    <td data-bind="text: volume"></td>
+                            <tbody data-bind="delegatedHandler: ['click', 'mouseover', 'mouseout'], foreach: {data : rows}" class="datagrid-table-body">
+                                <tr data-bind="css: {'hilite' : hiliteClass }" data-click="hiliteRow" class="datagrid-table-row">
+                                    <td data-bind="text: ticker" class="datagrid-table-cell ticker"></td>
+                                    <td data-bind="text: industry" class="datagrid-table-cell industry"></td>
+                                    <td data-bind="text: marketcap" class="datagrid-table-cell marketcap"></td>
+                                    <td data-bind="text: price" class="datagrid-table-cell price"></td>
+                                    <td data-bind="text: change, css: {'negative': !positiveChangeValue(), 'positive' : positiveChangeValue()}" class="datagrid-table-cell change"></td>
+                                    <td data-bind="text: volume" class="datagrid-table-cell volume"></td>
                                 </tr>
                             </tbody>
                         </table>
