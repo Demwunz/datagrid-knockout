@@ -18,29 +18,20 @@ define([
             self.rows = ko.observableArray([]);
 
             (function getData(){
-                var r = reqwest({
-                            url: url,
-                            type: 'json',
-                            method: 'get',
-                            contentType: 'application/json',
-                            crossOrigin: true,
-                            withCredentials: false,
-                            error: function (err) {
-                                console.log(err);
-                            },
-                            success: function (response) {
-                                setTimeout(function () {
-                                r.then(function (resp) {
-                                        processResponse(response.feed);
-                                    },
-                                    function (err) { })
-                                  .always(function (resp) {
-                                    //
-                                    getData();
-                                  })
-                              }, 3000)
-                            }
-                        });
+                reqwest({
+                    url: url,
+                    type: 'json',
+                    method: 'get',
+                    contentType: 'application/json',
+                    crossOrigin: true,
+                    withCredentials: false,
+                    error: function (err) {
+                        console.log(err);
+                    },
+                    success: function (response) {
+                        processResponse(response.feed);
+                    }
+                });
             })();
 
             var processResponse = function(response){
