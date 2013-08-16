@@ -7,7 +7,6 @@ define([
 
         var DataGridRow = function(rowData){
             var self = this;
-            self.hiliteClass = ko.observable(false);
             self.id = rowData.id.$t;
             self.updated = rowData.updated.$t;
             self.ticker = rowData.gsx$ticker.$t;

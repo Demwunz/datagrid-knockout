@@ -171,6 +171,9 @@ a:visited{
     }
     &:nth-child(even){
       background-color:#f8f8f8;
+      &:hover{
+        background-color:darken(#f8f8f8, 5%);
+      }
     }
 }
 .datagrid-table-cell{

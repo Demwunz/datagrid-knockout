@@ -41,15 +41,11 @@ define([
                     updateData(response.entry);
                 }
             };
+
             var updateData = function(entries){
                 entries.forEach(function(entry){
                     self.rows.push(new DataRow(entry));
                 });
-            };
-
-            var hiliteRow = function(row){
-                console.log(row);
-                row.hiliteClass(!row.hiliteClass());
             };
 
             self.sortRows = function(func){

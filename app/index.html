@@ -1,14 +1,12 @@
 <!doctype html>
-<html class="no-js">
+<html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>DataGrid</title>
         <meta name="description" content="Reuters Test">
         <meta name="viewport" content="width=device-width">
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link rel="stylesheet" href="styles/screen.css">
-        <script>document.documentElement.classList.add('js');</script>
     </head>
     <body>
         <div class="container">
@@ -52,7 +50,7 @@
                                 <th class="datagrid-table-head-cell volume" data-bind="event : {click  : sortRows.bind($root, 'getVolume')}">Volume</th>
                             </thead>
                             <tbody data-bind="delegatedHandler: ['click', 'mouseover', 'mouseout'], foreach: {data : rows}" class="datagrid-table-body">
-                                <tr data-bind="css: {'hilite' : hiliteClass }" data-click="hiliteRow" class="datagrid-table-row">
+                                <tr data-click="hiliteColumn" class="datagrid-table-row">
                                     <td data-bind="text: ticker" class="datagrid-table-cell ticker"></td>
                                     <td data-bind="text: industry" class="datagrid-table-cell industry"></td>
                                     <td data-bind="text: marketcap" class="datagrid-table-cell marketcap"></td>
