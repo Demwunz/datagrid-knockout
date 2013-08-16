@@ -42,21 +42,13 @@
                     <div id="datagrid">
                         <table cellspacing="0" cellpadding="0" class="datagrid-table">
                             <thead class="datagrid-table-head">
-                                <th class="datagrid-table-head-cell ticker" data-bind="event : {click  : sortRows.bind($root, 'getTicker')}">Ticker</th>
-                                <th class="datagrid-table-head-cell industry" data-bind="event : {click  : sortRows.bind($root, 'getIndustry')}">Industry</th>
-                                <th class="datagrid-table-head-cell marketcap" data-bind="event : {click  : sortRows.bind($root, 'getMarketcap')}">Market Cap</th>
-                                <th class="datagrid-table-head-cell price" data-bind="event : {click  : sortRows.bind($root, 'getPrice')}">Price</th>
-                                <th class="datagrid-table-head-cell change" data-bind="event : {click  : sortRows.bind($root, 'getChange')}">Change</th>
-                                <th class="datagrid-table-head-cell volume" data-bind="event : {click  : sortRows.bind($root, 'getVolume')}">Volume</th>
+                                <tr data-bind="foreach: {data : headers}">
+                                <th class="datagrid-table-head-cell" data-bind="text: $t, event : {click : $root.sortRows}"></th>
+                                </tr>
                             </thead>
-                            <tbody data-bind="delegatedHandler: ['click', 'mouseover', 'mouseout'], foreach: {data : rows}" class="datagrid-table-body">
+                            <tbody data-bind="delegatedHandler: ['click', 'mouseover', 'mouseout']" class="datagrid-table-body">
                                 <tr data-click="hiliteColumn" class="datagrid-table-row">
-                                    <td data-bind="text: ticker" class="datagrid-table-cell ticker"></td>
-                                    <td data-bind="text: industry" class="datagrid-table-cell industry"></td>
-                                    <td data-bind="text: marketcap" class="datagrid-table-cell marketcap"></td>
-                                    <td data-bind="text: price" class="datagrid-table-cell price"></td>
-                                    <td data-bind="text: change, css: {'negative': !positiveChangeValue(), 'positive' : positiveChangeValue()}" class="datagrid-table-cell change"></td>
-                                    <td data-bind="text: volume" class="datagrid-table-cell volume"></td>
+                                    <td class="datagrid-table-cell"></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -2,24 +2,38 @@
 define([
     'reqwest',
     'knockout',
-    'dataRow',
     'lib/knockout-delegatedEvents'
     ],
-    function (reqwest, ko, DataRowViewModel) {
+    function (reqwest, ko) {
         'use strict';
+        var gsData, rowCount, colCount;
+
+        var DataGridCell = function(data){
+            var self = this;
+            self.text = data.$t;
+            self.column = data.column;
+            if(data.numericValue){
+                self.numericValue = data.numericValue;
+            }
+        };
+
+        DataGridCell.prototype.getValue = function(){
+            if(this.numericValue){
+                 return parseFloat(this.numericValue);
+            } else{
+                return this.$t;
+            }
+        };
 
         var DataGridViewModel = function(__DATASOURCE){
-            var self = this,
-                url = __DATASOURCE,
-                lastUpdated,
-                DataRow = DataRowViewModel,
-                currentSort = 'ticker';
+            var self = this;
 
-            self.rows = ko.observableArray([]);
+            self.headers = [];
+            self.rows = [];
 
             (function getData(){
                 reqwest({
-                    url: url,
+                    url: __DATASOURCE,
                     type: 'json',
                     method: 'get',
                     contentType: 'application/json',
@@ -29,48 +43,49 @@ define([
                         console.log(err);
                     },
                     success: function (response) {
-                        processResponse(response.feed);
+                        gsData = response.feed;
+                        rowCount = parseInt(gsData.gs$rowCount.$t),
+                        colCount = parseInt(gsData.gs$colCount.$t);
+                        var row = {};
+                        var rowCells = colCount;
+                        var tbody = parseInt(rowCount - 1);
+                        while(rowCells--){
+                            row[rowCells + 1] = null;
+                        };
+                        while(tbody--){
+                            self.rows.push(row);
+                        };
+                        createTable(gsData.entry);
                     }
                 });
             })();
 
-            var processResponse = function(response){
-                var responseModifiedDate = response.updated.$t;
-                if(responseModifiedDate != lastUpdated){
-                    lastUpdated = responseModifiedDate;
-                    updateData(response.entry);
-                }
-            };
-
-            var updateData = function(entries){
-                entries.forEach(function(entry){
-                    self.rows.push(new DataRow(entry));
+            var createTable = function(cells){
+                cells.forEach(function(cell, index, array){
+                    if(index < colCount){
+                        self.headers.push(cell.gs$cell);
+                    } else {
+                        createRows(cell.gs$cell);
+                    }
                 });
             };
 
-            self.sortRows = function(func){
-                var sortColumn = function(){
-                        self.rows.sort(function(a,b) {
-                            var aValue = a[func](),
-                                bValue = b[func]();
-                            if (aValue > bValue) {
-                                return 1;
-                            } else if (aValue < bValue) {
-                                return -1;
-                            } else {
-                                // a must be equal to b
-                                return 0;
-                            }
-                        });
-                    };
+            var createRows = function(cell){
+                console.log(self.rows[cell.row][cell.col]);
+                // self.rows[cell.row][cell.col] = new DataGridCell(cell);
+            };
 
-                if(currentSort == func){
-                    sortColumn();
-                    self.rows.reverse();
-                } else{
-                    currentSort = func;
-                    sortColumn();
-                }
+            self.sortRows = function(){
+                self.rows.sort(function(a,b) {
+                    if (a > b) {
+                        return 1;
+                    } else if (a < b) {
+                        return -1;
+                    } else {
+                        // a must be equal to b
+                        return 0;
+                    }
+                });
             };
 
         };

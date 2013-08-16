@@ -7,14 +7,6 @@ define([
 
         var DataGridRow = function(rowData){
             var self = this;
-            self.id = rowData.id.$t;
-            self.updated = rowData.updated.$t;
-            self.ticker = rowData.gsx$ticker.$t;
-            self.industry = rowData.gsx$industry.$t;
-            self.marketcap = rowData.gsx$marketcap.$t;
-            self.price = rowData.gsx$price.$t;
-            self.change = rowData.gsx$change.$t;
-            self.volume = rowData.gsx$volume.$t;
         };
 
         DataGridRow.prototype.getTicker = function(){
