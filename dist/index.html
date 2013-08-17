@@ -51,5 +51,14 @@
             </div>
         </div>
         <script data-main="scripts/88b0621b.main" src="bower_components/requirejs/require.js"></script>
+        <script id="headerTmpl" type="text/html">
+            <th data-bind="text: title, event : {click : $root.sortRows}" class="datagrid-table-head-cell"></th>
+        </script>
+        <script id="rowTmpl" type="text/html">
+            <tr data-bind="template: { name: 'cellTmpl', foreach: $data}, delegatedHandler: ['mouseover', 'mouseout']" class="datagrid-table-row"></tr>
+        </script>
+        <script id="cellTmpl" type="text/html">
+            <td data-bind="text: text, css: {'number': getCellType(), 'column': $root.column, 'positive' : getNumericSpecialType(), 'negative' : getNumericSpecialType()}" data-mouseover="enableColumn()" data-mouseout="disableColumn()"class="datagrid-table-cell"></td>
+        </script>
 </body>
 </html>

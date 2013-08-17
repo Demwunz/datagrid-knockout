@@ -52,6 +52,7 @@
         </div>
         <!-- build:js scripts/main.js -->
         <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+        <!-- endbuild -->
         <script id="headerTmpl" type="text/html">
             <th data-bind="text: title, event : {click : $root.sortRows}" class="datagrid-table-head-cell"></th>
         </script>
@@ -61,6 +62,5 @@
         <script id="cellTmpl" type="text/html">
             <td data-bind="text: text, css: {'number': getCellType(), 'column': $root.column, 'positive' : getNumericSpecialType(), 'negative' : getNumericSpecialType()}" data-mouseover="enableColumn()" data-mouseout="disableColumn()"class="datagrid-table-cell"></td>
         </script>
-        <!-- endbuild -->
 </body>
 </html>
