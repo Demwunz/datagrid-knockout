@@ -27,15 +27,35 @@ define([
                 };
 
             GridCell.prototype.getFormattedText = function(){
-                var cell = this;
-                return cell.text;
-            }
+                var cell = this,
+                    text = cell.text,
+                    firstSymbol = text.charAt(0),
+                    lastSymbol = text.slice(-1),
+                    addCommas = function(value) {
+                        //http://stackoverflow.com/a/2901298/542369
+                        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    };
+
+                if(!isNaN(cell.value)) {
+                    //http://stackoverflow.com/a/3884711/542369
+                    if(isNaN(lastSymbol)) {
+                        return addCommas(parseFloat(text.split(text.length-1)[0]).toFixed(2)) + lastSymbol;
+                    } else if(isNaN(firstSymbol)) {
+                        return firstSymbol + addCommas(parseFloat(text.split(firstSymbol)[1]).toFixed(2));
+                    } else {
+                        return addCommas(parseFloat(text).toFixed(2));
+                    }
+                } else {
+                    return text;
+                }
+            };
+
             GridCell.prototype.getCellClass = function(){
                 var cell = this,
                     classes = ['datagrid-table-cell'];
                 if(!isNaN(cell.value)){
                     classes.push('cell-type-number');
-                    if(cell.text.indexOf('%') != -1){
+                    if(isNaN(cell.text.slice(-1))){
                         if(parseFloat(cell.value) >= 0){
                             classes.push('positive');
                         } else {
@@ -66,6 +86,7 @@ define([
 
             var setRows = function setRows(cells){
                 var rowsArray = [];
+                var headersArray = [];
                 //go over each cell and determine where to put it
 
                 cells.forEach(function(cell, index){
@@ -73,7 +94,7 @@ define([
                         cellCol = cell.gs$cell.col-=1;
                     //if its less then the column count, must be the header (first row)
                     if(cellRow == '1') {
-                        self.headers.push({title: cell.gs$cell.$t, column : cellCol});
+                        headersArray.push({title: cell.gs$cell.$t, column : cellCol, numerical : false});
                     } else {
                         cellRow-=2;
                         //create a row if it doesnt already exist
@@ -83,9 +104,15 @@ define([
                         //push the cell into the row
                         rowsArray[cellRow][cellCol] = setGridCell(cell);
                     }
+                    if(cellRow == '2'){
+                        if(cell.gs$cell.numericValue){
+                            headersArray[cellCol].numerical = true;
+                        }
+                    }
                 });
 
                 //once the custom Array is built, populate the UI
+                self.headers(headersArray);
                 self.rows(rowsArray);
             };
 
@@ -94,9 +121,9 @@ define([
                 return new GridCell(cell.gs$cell.$t, value, cell.gs$cell.col);
             };
 
-            self.sortRows = function sortRows(data){
+            self.sortColumn = function sortColumn(data){
                 var column = data.column;
-
+                //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
                 self.rows.sort(function(a,b) {
                     var aValue = a[column].value,
                         bValue = b[column].value;

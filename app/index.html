@@ -57,7 +57,7 @@
         <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
         <!-- endbuild -->
         <script id="headerTmpl" type="text/html">
-            <th data-bind="text: title, event : {click : $root.sortRows}" class="datagrid-table-head-cell"></th>
+            <th data-bind="text: title, event : {click : $root.sortColumn}, css: {'numerical' : numerical}" class="datagrid-table-head-cell"></th>
         </script>
         <script id="rowTmpl" type="text/html">
             <tr data-bind="template: { name: 'cellTmpl', foreach: $data}, delegatedHandler: ['mouseover', 'mouseout']" class="datagrid-table-row"></tr>

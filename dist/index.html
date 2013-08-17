@@ -6,7 +6,7 @@
         <title>DataGrid</title>
         <meta name="description" content="Reuters Test">
         <meta name="viewport" content="width=device-width">
-        <link rel="stylesheet" href="styles/5b76bfcc.main.css">
+        <link rel="stylesheet" href="styles/bfe87a91.main.css">
     </head>
     <body>
         <div class="container">
@@ -53,9 +53,9 @@
                 </main>
             </div>
         </div>
-        <script data-main="scripts/9c04e58f.main" src="bower_components/requirejs/require.js"></script>
+        <script data-main="scripts/4373d673.main" src="bower_components/requirejs/require.js"></script>
         <script id="headerTmpl" type="text/html">
-            <th data-bind="text: title, event : {click : $root.sortRows}" class="datagrid-table-head-cell"></th>
+            <th data-bind="text: title, event : {click : $root.sortColumn}, css: {'numerical' : numerical}" class="datagrid-table-head-cell"></th>
         </script>
         <script id="rowTmpl" type="text/html">
             <tr data-bind="template: { name: 'cellTmpl', foreach: $data}, delegatedHandler: ['mouseover', 'mouseout']" class="datagrid-table-row"></tr>
