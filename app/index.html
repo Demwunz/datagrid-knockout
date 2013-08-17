@@ -39,8 +39,11 @@
                             <li class="datagrid-nav-item"><a href="/">My Profile</a></li>
                         </ul>
                     </nav>
-                    <div id="datagrid">
+                    <div id="datagrid" class="datagrid-container">
                         <table cellspacing="0" cellpadding="0" class="datagrid-table">
+                            <colgroup data-bind="foreach: headers">
+                                <col>
+                            </colgroup>
                             <thead class="datagrid-table-head">
                                 <tr data-bind="template: { name: 'headerTmpl', foreach: headers}"></tr>
                             </thead>
@@ -60,7 +63,7 @@
             <tr data-bind="template: { name: 'cellTmpl', foreach: $data}, delegatedHandler: ['mouseover', 'mouseout']" class="datagrid-table-row"></tr>
         </script>
         <script id="cellTmpl" type="text/html">
-            <td data-bind="text: text, css: {'number': getCellType(), 'column': $root.column, 'positive' : getNumericSpecialType(), 'negative' : getNumericSpecialType()}" data-mouseover="enableColumn()" data-mouseout="disableColumn()"class="datagrid-table-cell"></td>
+            <td data-bind="text: getFormattedText(), attr: {'class': getCellClass()}"></td>
         </script>
 </body>
 </html>

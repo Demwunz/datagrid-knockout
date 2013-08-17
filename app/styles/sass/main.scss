@@ -98,9 +98,7 @@ a:visited{
   }
   a{
     @extend %bold-font;
-    @include transition-property(all);
-    @include transition-duration(.3s);
-    @include transition-timing-function(ease-in);
+    color:#8e989f;
     border-left:1px solid #fff;
     border-top:1px solid #fff;
     border-right:1px solid #cacad2;
@@ -138,15 +136,21 @@ a:visited{
     padding:8px;
   }
 }
+.datagrid-container{
+  @include border-radius(3px);
+  border:1px solid #cacad2;
+  height:292px;
+  overflow: auto;
+}
 .datagrid-table{
-    @include border-radius(3px);
-    border:1px solid #cacad2;
     width:100%;
+    /*col:nth-child(4),
+    .datagrid-table-row:nth-child(even) .datagrid-table-cell:nth-child(4){
+      background-color:darken(#f8f8f8, 2%);
+    }*/
 }
 .datagrid-table-head{
   @include background-image(linear-gradient(#e9f1f7, #d9e7f1));
-  border-left:1px solid #fff;
-  border-top:1px solid #fff;
 }
 .datagrid-table-head-cell{
   @extend %bold-font;
@@ -165,25 +169,25 @@ a:visited{
         clear: both;
     }
     &:hover{
-      background-color:darken(#f8f8f8, 5%);
+      background-color:darken(#f8f8f8, 2%);
     }
     &:nth-child(even){
       background-color:#f8f8f8;
       &:hover{
-        background-color:darken(#f8f8f8, 5%);
+        background-color:darken(#f8f8f8, 2%);
       }
     }
 }
 .datagrid-table-cell{
   padding:10px;
   text-align:left;
-  &.number{
+  &.cell-type-number{
     text-align:right;
     &.positive{
-      color:green;
+      color:#0aa000;
     }
     &.negative{
-      color:red;
+      color:#a00;
     }
   }
   &.column{

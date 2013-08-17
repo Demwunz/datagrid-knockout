@@ -1,9 +1,10 @@
 /*global define */
 define([
+    'bean',
     'reqwest',
     'knockout',
     'lib/knockout-delegatedEvents'],
-    function (reqwest, ko) {
+    function (bean, reqwest, ko) {
         'use strict';
 
         return function DataGridViewModel(datasource){
@@ -23,52 +24,26 @@ define([
                     this.text = text;
                     this.value = value,
                     this.column = column;
-                },
-                TextCell = function(text, value, column){
-                    this.base = GridCell;
-                    this.base(text, value, column);
-                },
-                NumericCell = function(text, value, column){
-                    this.base = GridCell;
-                    this.base(text, value, column);
-                },
-                NumericSpecialCell = function(text, value, column){
-                    this.base = NumericCell;
-                    this.base(text, value, column);
                 };
 
-            TextCell.prototype = new GridCell;
-            NumericCell.prototype = new GridCell;
-            NumericSpecialCell.prototype = new NumericCell;
-
-            GridCell.prototype.getNumericSpecialType = function(){
-                if(this instanceof NumericSpecialCell){
-                    if(parseFloat(this.value) > 0){
-                        return true;
-                    } else {
-                        return false;
+            GridCell.prototype.getFormattedText = function(){
+                var cell = this;
+                return cell.text;
+            }
+            GridCell.prototype.getCellClass = function(){
+                var cell = this,
+                    classes = ['datagrid-table-cell'];
+                if(!isNaN(cell.value)){
+                    classes.push('cell-type-number');
+                    if(cell.text.indexOf('%') != -1){
+                        if(parseFloat(cell.value) >= 0){
+                            classes.push('positive');
+                        } else {
+                            classes.push('negative');
+                        }
                     }
-                } else {
-                    return false;
                 }
-            };
-
-            GridCell.prototype.getCellType = function(){
-                return this instanceof NumericCell;
-            };
-
-            GridCell.prototype.getCellType = function(){
-                return this instanceof NumericCell;
-            };
-
-            GridCell.prototype.enableColumn = function(){
-                console.log('over');
-                return self.column(this.column);
-            };
-
-            GridCell.prototype.disableColumn = function(){
-                console.log('out');
-                return self.column(0);
+                return classes.join(' ');
             };
 
             //get the data asap
@@ -115,20 +90,8 @@ define([
             };
 
             var setGridCell = function setGridCell(cell){
-                var text = cell.gs$cell.$t,
-                    column = cell.gs$cell.col,
-                    numeric = cell.gs$cell.numericValue,
-                    value = numeric ? parseFloat(numeric) : text;
-
-                if(numeric){
-                    if(text.indexOf('%') != -1){
-                        return new NumericSpecialCell(text, value, column);
-                    } else {
-                        return new NumericCell(text, value, column);
-                    }
-                } else {
-                    return new GridCell(text, value, column);
-                }
+                var value = cell.gs$cell.numericValue ? parseFloat(cell.gs$cell.numericValue) : cell.gs$cell.$t;
+                return new GridCell(cell.gs$cell.$t, value, cell.gs$cell.col);
             };
 
             self.sortRows = function sortRows(data){
