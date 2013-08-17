@@ -42,15 +42,9 @@
                     <div id="datagrid">
                         <table cellspacing="0" cellpadding="0" class="datagrid-table">
                             <thead class="datagrid-table-head">
-                                <tr data-bind="foreach: headers">
-                                    <th data-bind="text: title, event : {click : $root.sortRows}" class="datagrid-table-head-cell"></th>
-                                </tr>
+                                <tr data-bind="template: { name: 'headerTmpl', foreach: headers}"></tr>
                             </thead>
-                            <tbody data-bind="delegatedHandler: ['mouseover', 'mouseout'], foreach : rows" class="datagrid-table-body">
-                                <tr data-bind="foreach: $data" data-click="hiliteColumn" class="datagrid-table-row">
-                                    <td data-bind="text: text" class="datagrid-table-cell"></td>
-                                </tr>
-                            </tbody>
+                            <tbody data-bind="template: { name: 'rowTmpl', foreach : rows}" class="datagrid-table-body"></tbody>
                         </table>
                     </div>
                 </main>
@@ -58,6 +52,15 @@
         </div>
         <!-- build:js scripts/main.js -->
         <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+        <script id="headerTmpl" type="text/html">
+            <th data-bind="text: title, event : {click : $root.sortRows}" class="datagrid-table-head-cell"></th>
+        </script>
+        <script id="rowTmpl" type="text/html">
+            <tr data-bind="template: { name: 'cellTmpl', foreach: $data}, delegatedHandler: ['mouseover', 'mouseout']" class="datagrid-table-row"></tr>
+        </script>
+        <script id="cellTmpl" type="text/html">
+            <td data-bind="text: text, css: {'number': getCellType(), 'column': $root.column, 'positive' : getNumericSpecialType(), 'negative' : getNumericSpecialType()}" data-mouseover="enableColumn()" data-mouseout="disableColumn()"class="datagrid-table-cell"></td>
+        </script>
         <!-- endbuild -->
 </body>
 </html>

@@ -151,13 +151,11 @@ a:visited{
 .datagrid-table-head-cell{
   @extend %bold-font;
   padding:10px;
-  text-align:right;
+  text-align:left;
   &:hover{
     color:$orange;
     cursor:default;
   }
-}
-.datagrid-table-body{
 }
 .datagrid-table-row{
     &:after{
@@ -177,18 +175,18 @@ a:visited{
     }
 }
 .datagrid-table-cell{
-  padding:10px 0 10px 10px;
-  &.text{
-    text-align:left;
-  }
+  padding:10px;
+  text-align:left;
   &.number{
-    padding:10px 10px 10px 0;
     text-align:right;
+    &.positive{
+      color:green;
+    }
+    &.negative{
+      color:red;
+    }
   }
-  &.positive{
-    color:green;
-  }
-  &.negative{
-    color:red;
+  &.column{
+    background-color:darken(#f8f8f8, 5%);
   }
 }

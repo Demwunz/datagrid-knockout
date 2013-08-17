@@ -7,8 +7,9 @@ require.config({
 
 require(['DataGrid','knockout'], function (DataGridViewModel, ko) {
     'use strict';
-    var __DATASOURCE = 'https://spreadsheets.google.com/feeds/cells/0Akt_os3oK7whdHlVWDl5Rk5TMkJHaW5mRm9kYjJKLXc/od6/public/values?alt=json';
-    var dataGrid = new DataGridViewModel(__DATASOURCE);
+    var __SPREADSHEET = '0Akt_os3oK7whdHlVWDl5Rk5TMkJHaW5mRm9kYjJKLXc',
+        __SHEET = 'od6',
+        __DATASOURCE = 'https://spreadsheets.google.com/feeds/cells/' + __SPREADSHEET + '/' + __SHEET + '/public/values?alt=json';
 
-    ko.applyBindings(dataGrid, document.getElementById('datagrid'));
+    ko.applyBindings(new DataGridViewModel(__DATASOURCE), document.getElementById('datagrid'));
 });

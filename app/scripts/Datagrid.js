@@ -8,30 +8,86 @@ define([
 
         return function DataGridViewModel(datasource){
             var self = this,
-                rowCount, colCount, sort,
-                GridCell = function(text, value, cellType){
-                    this.text = text;
-                    this.value = value ? value : text;
-                    this.cellType = cellType ? cellType : 'text';
-                },
-                FloatingPointGridCell = function(text, value){
-                    this.base = GridCell;
-                    this.base(text, value, 'number');
-                },
-                GridRow = function(){
-                    this.cells = [];
-                    return this.cells;
-                };
-
-            FloatingPointGridCell.prototype = new GridCell;
-
-            GridCell.prototype.getValue = function(column){
-                return this.value;
-            };
+                sort;
 
             //knockout UI
             self.headers = ko.observableArray([]);
             self.rows = ko.observableArray([]);
+            self.column = ko.observable(null);
+
+            var GridRow = function(){
+                    this.cells = [];
+                    return this.cells;
+                },
+                GridCell = function(text, value, column){
+                    this.text = text;
+                    this.value = value,
+                    this.column = column;
+                },
+                TextCell = function(text, value, column){
+                    this.base = GridCell;
+                    this.base(text, value, column);
+                },
+                NumericCell = function(text, value, column){
+                    this.base = GridCell;
+                    this.base(text, value, column);
+                },
+                NumericSpecialCell = function(text, value, column){
+                    this.base = NumericCell;
+                    this.base(text, value, column);
+                };
+
+            TextCell.prototype = new GridCell;
+            NumericCell.prototype = new GridCell;
+            NumericSpecialCell.prototype = new NumericCell;
+
+            GridCell.prototype.getNumericSpecialType = function(){
+                if(this instanceof NumericSpecialCell){
+                    if(parseFloat(this.value) > 0){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            };
+
+            GridCell.prototype.getCellType = function(){
+                return this instanceof NumericCell;
+            };
+
+            GridCell.prototype.getCellType = function(){
+                return this instanceof NumericCell;
+            };
+
+            GridCell.prototype.enableColumn = function(){
+                console.log('over');
+                return self.column(this.column);
+            };
+
+            GridCell.prototype.disableColumn = function(){
+                console.log('out');
+                return self.column(0);
+            };
+
+            //get the data asap
+            (function getData(){
+                reqwest({
+                    url: datasource,
+                    type: 'json',
+                    method: 'get',
+                    contentType: 'application/json',
+                    crossOrigin: true,
+                    withCredentials: false,
+                    error: function (err) {
+                        console.log(err);
+                    },
+                    success: function (response) {
+                        setRows(response.feed.entry);
+                    }
+                });
+            })();
 
             var setRows = function setRows(cells){
                 var rowsArray = [];
@@ -44,34 +100,34 @@ define([
                     if(cellRow == '1') {
                         self.headers.push({title: cell.gs$cell.$t, column : cellCol});
                     } else {
+                        cellRow-=2;
                         //create a row if it doesnt already exist
                         if(!rowsArray[cellRow]) {
                             rowsArray[cellRow] = new GridRow();
                         }
-                        if(cell.gs$cell.col == 4){
-                           console.log(cell.gs$cell.numericValue);
-                        }
                         //push the cell into the row
-                        rowsArray[cellRow][cellCol] = setCellType(cell);
+                        rowsArray[cellRow][cellCol] = setGridCell(cell);
                     }
                 });
 
                 //once the custom Array is built, populate the UI
                 self.rows(rowsArray);
             };
-            var setCellType = function(cell){
-                var text = cell.gs$cell.$t,
-                    numericValue = cell.gs$cell.numericValue;
-                if(numericValue){
-                    if(numericValue.match(/^[-+][0-9]+\.[0-9]+[eE][-+]?[0-9]+$/) || numericValue.match(/[-+][0-9]+\.[0-9]+$/) || numericValue.match(/^[-+]?[0-9]+\.[0-9]+$/)){
 
-                        var value = parseFloat(numericValue).toFixed(2);
-                        return new FloatingPointGridCell(text, value);
+            var setGridCell = function setGridCell(cell){
+                var text = cell.gs$cell.$t,
+                    column = cell.gs$cell.col,
+                    numeric = cell.gs$cell.numericValue,
+                    value = numeric ? parseFloat(numeric) : text;
+
+                if(numeric){
+                    if(text.indexOf('%') != -1){
+                        return new NumericSpecialCell(text, value, column);
                     } else {
-                        return new GridCell(text, parseInt(numericValue, 10));
+                        return new NumericCell(text, value, column);
                     }
                 } else {
-                    return new GridCell(text);
+                    return new GridCell(text, value, column);
                 }
             };
 
@@ -79,8 +135,8 @@ define([
                 var column = data.column;
 
                 self.rows.sort(function(a,b) {
-                    var aValue = a[column].getValue(),
-                        bValue = b[column].getValue();
+                    var aValue = a[column].value,
+                        bValue = b[column].value;
                     if (aValue > bValue) {
                         return 1;
                     } else if (aValue < bValue) {
@@ -96,26 +152,6 @@ define([
                 }
                 sort = column;
             };
-
-            //self invoke the ajax call, we need the data asap.
-            (function getData(){
-                reqwest({
-                    url: datasource,
-                    type: 'json',
-                    method: 'get',
-                    contentType: 'application/json',
-                    crossOrigin: true,
-                    withCredentials: false,
-                    error: function (err) {
-                        console.log(err);
-                    },
-                    success: function (response) {
-                        rowCount = response.feed.gs$rowCount.$t;
-                        colCount = response.feed.gs$colCount.$t;
-                        setRows(response.feed.entry);
-                    }
-                });
-            })();
         };
     }
 );
