@@ -6,7 +6,7 @@
         <title>DataGrid</title>
         <meta name="description" content="Reuters Test">
         <meta name="viewport" content="width=device-width">
-        <link rel="stylesheet" href="styles/screen.css">
+        <link rel="stylesheet" href="styles/main.css">
     </head>
     <body>
         <div class="container">
@@ -42,13 +42,13 @@
                     <div id="datagrid">
                         <table cellspacing="0" cellpadding="0" class="datagrid-table">
                             <thead class="datagrid-table-head">
-                                <tr data-bind="foreach: {data : headers}">
-                                <th class="datagrid-table-head-cell" data-bind="text: $t, event : {click : $root.sortRows}"></th>
+                                <tr data-bind="foreach: headers">
+                                    <th data-bind="text: title, event : {click : $root.sortRows}" class="datagrid-table-head-cell"></th>
                                 </tr>
                             </thead>
-                            <tbody data-bind="delegatedHandler: ['click', 'mouseover', 'mouseout']" class="datagrid-table-body">
-                                <tr data-click="hiliteColumn" class="datagrid-table-row">
-                                    <td class="datagrid-table-cell"></td>
+                            <tbody data-bind="delegatedHandler: ['mouseover', 'mouseout'], foreach : rows" class="datagrid-table-body">
+                                <tr data-bind="foreach: $data" data-click="hiliteColumn" class="datagrid-table-row">
+                                    <td data-bind="text: text" class="datagrid-table-cell"></td>
                                 </tr>
                             </tbody>
                         </table>

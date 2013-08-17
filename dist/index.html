@@ -1,64 +1,54 @@
 <!doctype html>
-<html class="no-js">
+<html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>DataGrid</title>
         <meta name="description" content="Reuters Test">
         <meta name="viewport" content="width=device-width">
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <link rel="stylesheet" href="styles/screen.css">
-        <script src="scripts/vendor/f7f27360.modernizr.js"></script>
+        <link rel="stylesheet" href="styles/e6c84bb6.main.css">
     </head>
     <body>
         <div class="container">
             <div id="dialog">
-                <div class="bar">
+                <div class="datagrid-bar">
                     <p>DataGrid Control Panel</p>
                 </div>
-                <main>
-                    <header>
-                        <div class="logo">
-                            <h1>Data<span>Grid</span></h1>
+                <main class="datagrid-main">
+                    <header class="datagrid-header">
+                        <div>
+                            <h1 class="datagrid-logo">Data<span>Grid</span></h1>
                         </div>
                         <aside class="datagrid-aside">
-                            <ul>
-                                  <li><a href="/">FAQ</a></li>
-                                  <li><a href="/">Help</a></li>
-                              </ul>
+                            <ul class="datagrid-global-links">
+                                <li class="datagrid-global-link"><a href="/">FAQ</a></li>
+                                <li class="datagrid-global-link"><a href="/">Help</a></li>
+                            </ul>
+                            <input type="search" placeholder="search" results="5">
                         </aside>
                     </header>
                     <nav class="datagrid-nav">
                         <ul class="datagrid-nav-items">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/">Preview</a></li>
-                            <li><a href="/">Activity</a></li>
-                            <li><a href="/">Control</a></li>
-                            <li><a href="/">Issue</a></li>
-                            <li><a href="/">Overview</a></li>
-                            <li><a href="/">Admin</a></li>
-                            <li><a href="/">My Profile</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Home</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Preview</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Activity</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Control</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Issue</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Overview</a></li>
+                            <li class="datagrid-nav-item"><a href="/">Admin</a></li>
+                            <li class="datagrid-nav-item"><a href="/">My Profile</a></li>
                         </ul>
                     </nav>
                     <div id="datagrid">
-                        <table cellspacing="0" cellpadding="0">
-                            <!-- the thead would be generated via ajax/json if the headers were available in the .csv file. -->
-                            <thead>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'ticker')}">Ticker</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'industry')}">Industry</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'marketcap')}">Market Cap</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'price')}">Price</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'change')}">Change</th>
-                                <th data-bind="event : {click  : sortRows.bind($root, 'volume')}">Volume</th>
+                        <table cellspacing="0" cellpadding="0" class="datagrid-table">
+                            <thead class="datagrid-table-head">
+                                <tr data-bind="foreach: headers">
+                                    <th data-bind="text: title, event : {click : $root.sortRows}" class="datagrid-table-head-cell"></th>
+                                </tr>
                             </thead>
-                            <tbody data-bind="foreach: {data : rows}, delegatedHandler: 'click'">
-                                <tr data-bind="css: {'odd': ($index() % 2 == 0), 'hilite' : hiliteClass }" data-click="hiliteRow">
-                                    <td data-bind="text: ticker"></td>
-                                    <td data-bind="text: industry"></td>
-                                    <td data-bind="text: marketcap"></td>
-                                    <td data-bind="text: price"></td>
-                                    <td data-bind="text: change, css: {'negative': !positiveChangeValue(), 'positive' : positiveChangeValue()}"></td>
-                                    <td data-bind="text: volume"></td>
+                            <tbody data-bind="delegatedHandler: ['mouseover', 'mouseout'], foreach : rows" class="datagrid-table-body">
+                                <tr data-bind="foreach: $data" data-click="hiliteColumn" class="datagrid-table-row">
+                                    <td data-bind="text: text" class="datagrid-table-cell"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -66,6 +56,6 @@
                 </main>
             </div>
         </div>
-        <script data-main="scripts/5ace429e.main" src="bower_components/requirejs/require.js"></script>
+        <script data-main="scripts/f0efb7c7.main" src="bower_components/requirejs/require.js"></script>
 </body>
 </html>

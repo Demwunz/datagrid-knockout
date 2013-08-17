@@ -5,11 +5,10 @@ require.config({
     }
 });
 
-require(['DataGrid','knockout','reqwest'], function (DataGridViewModel, ko, reqwest) {
+require(['DataGrid','knockout'], function (DataGridViewModel, ko) {
     'use strict';
-    var __DATASOURCE_LIST = 'https://spreadsheets.google.com/feeds/list/0Akt_os3oK7whdHlVWDl5Rk5TMkJHaW5mRm9kYjJKLXc/od6/public/values?alt=json';
-    var __DATASOURCE_CELLS = 'https://spreadsheets.google.com/feeds/cells/0Akt_os3oK7whdHlVWDl5Rk5TMkJHaW5mRm9kYjJKLXc/od6/public/values?alt=json';
-    var dataGrid = new DataGridViewModel(__DATASOURCE_CELLS);
+    var __DATASOURCE = 'https://spreadsheets.google.com/feeds/cells/0Akt_os3oK7whdHlVWDl5Rk5TMkJHaW5mRm9kYjJKLXc/od6/public/values?alt=json';
+    var dataGrid = new DataGridViewModel(__DATASOURCE);
 
     ko.applyBindings(dataGrid, document.getElementById('datagrid'));
 });

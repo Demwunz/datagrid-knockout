@@ -2,47 +2,101 @@
 define([
     'reqwest',
     'knockout',
-    'lib/knockout-delegatedEvents'
-    ],
+    'lib/knockout-delegatedEvents'],
     function (reqwest, ko) {
         'use strict';
 
         return function DataGridViewModel(datasource){
             var self = this,
-                rowCount, colCount;
-            
+                rowCount, colCount, sort,
+                GridCell = function(text, value, cellType){
+                    this.text = text;
+                    this.value = value ? value : text;
+                    this.cellType = cellType ? cellType : 'text';
+                },
+                FloatingPointGridCell = function(text, value){
+                    this.base = GridCell;
+                    this.base(text, value, 'number');
+                },
+                GridRow = function(){
+                    this.cells = [];
+                    return this.cells;
+                };
+
+            FloatingPointGridCell.prototype = new GridCell;
+
+            GridCell.prototype.getValue = function(column){
+                return this.value;
+            };
+
             //knockout UI
-            self.headers = [];
+            self.headers = ko.observableArray([]);
             self.rows = ko.observableArray([]);
-            
-            var DataGridCell = function(cell){
-                //only store the data we're going to work with
-                this.text = cell.$t;
-                this.column = cell.col;
-                if(cell.numericValue){
-                    this.numericValue = cell.numericValue;
-                }
+
+            var setRows = function setRows(cells){
+                var rowsArray = [];
+                //go over each cell and determine where to put it
+
+                cells.forEach(function(cell, index){
+                    var cellRow = cell.gs$cell.row,
+                        cellCol = cell.gs$cell.col-=1;
+                    //if its less then the column count, must be the header (first row)
+                    if(cellRow == '1') {
+                        self.headers.push({title: cell.gs$cell.$t, column : cellCol});
+                    } else {
+                        //create a row if it doesnt already exist
+                        if(!rowsArray[cellRow]) {
+                            rowsArray[cellRow] = new GridRow();
+                        }
+                        if(cell.gs$cell.col == 4){
+                           console.log(cell.gs$cell.numericValue);
+                        }
+                        //push the cell into the row
+                        rowsArray[cellRow][cellCol] = setCellType(cell);
+                    }
+                });
+
+                //once the custom Array is built, populate the UI
+                self.rows(rowsArray);
             };
-            
-            var DataGridRow = function(){};
-    
-            DataGridRow.prototype.getValue = function(column){
-                var cell = this[column],
-                    numericValue = cell.numericValue;
-                // determine if the cell is numeric
+            var setCellType = function(cell){
+                var text = cell.gs$cell.$t,
+                    numericValue = cell.gs$cell.numericValue;
                 if(numericValue){
-                    //is it a floating point integer? (regex stolen from elsewhere)
-                    if(numericValue.match(/^[-+]?[0-9]+\.[0-9]+$/)){
-                        return parseFloat(numericValue);
-                    } else{
-                        return parseInt(numericValue, 10);
-                    } 
+                    if(numericValue.match(/^[-+][0-9]+\.[0-9]+[eE][-+]?[0-9]+$/) || numericValue.match(/[-+][0-9]+\.[0-9]+$/) || numericValue.match(/^[-+]?[0-9]+\.[0-9]+$/)){
+
+                        var value = parseFloat(numericValue).toFixed(2);
+                        return new FloatingPointGridCell(text, value);
+                    } else {
+                        return new GridCell(text, parseInt(numericValue, 10));
+                    }
                 } else {
-                    //must be a string
-                    return cell.text;
+                    return new GridCell(text);
                 }
             };
-            
+
+            self.sortRows = function sortRows(data){
+                var column = data.column;
+
+                self.rows.sort(function(a,b) {
+                    var aValue = a[column].getValue(),
+                        bValue = b[column].getValue();
+                    if (aValue > bValue) {
+                        return 1;
+                    } else if (aValue < bValue) {
+                        return -1;
+                    } else {
+                        // a must be equal to b
+                        return 0;
+                    }
+                });
+
+                if(sort == column){
+                    self.rows.reverse();
+                }
+                sort = column;
+            };
+
             //self invoke the ajax call, we need the data asap.
             (function getData(){
                 reqwest({
@@ -62,39 +116,6 @@ define([
                     }
                 });
             })();
-
-            var setRows = function(cells){
-                var rowsArray = [];
-                //go over each cell and determine where to put it
-                cells.forEach(function(cell, index){
-                    //if its less then the column count, must be the header (first row)
-                    if(index < colCount) {
-                        self.headers.push({title: cell.$t, column : cell.col});
-                    } else {
-                        //create a row if it doesnt already exist
-                        if(!rowsArray[cell.row].length) {                        
-                            rowsArray.push(new DataGridRow());
-                        }
-                        //push the cell into the row
-                        rowsArray[cell.row][cell.col] = new DataGridCell(cell);
-                    }    
-                });
-                //once the custom Array is built, populate the UI
-                self.rows(rowsArray);
-            };
-
-            self.sortRows = function(){
-                self.rows.sort(function(a,b) {
-                    if (a > b) {
-                        return 1;
-                    } else if (a < b) {
-                        return -1;
-                    } else {
-                        // a must be equal to b
-                        return 0;
-                    }
-                });
-            };
         };
     }
 );
