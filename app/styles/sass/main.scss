@@ -2,12 +2,17 @@
 
 $light-blue: #e1edf4;
 $light-grey:#c5c5c5;
+$grey2:#f8f8f8;
+$border-grey:#cacad2;
 $orange:#d80;
 
 %bold-font{
   @include text-shadow(#fff 1px 1px 0);
   font-weight:700;
   text-decoration: none;
+}
+%highlight-cell{
+  background-color:darken($grey2, 5%);
 }
 html{
   font-family: Tahoma, Verdana, Segoe, sans-serif;
@@ -65,7 +70,7 @@ a:visited{
 .datagrid-nav{
   @include border-radius(3px);
   @include background-image(linear-gradient(#f6f6f6, #eef0f0));
-  border:1px solid #cacad2;
+  border:1px solid $border-grey;
   margin:20px 0 20px;
   .datagrid-nav-items{
     list-style: none;
@@ -87,7 +92,7 @@ a:visited{
       border:none;
     }
     &:nth-child(8){
-      border-left:1px solid #cacad2;
+      border-left:1px solid $border-grey;
     }
     &:nth-child(7),
     &:nth-child(8){
@@ -102,7 +107,7 @@ a:visited{
   a{
     @extend %bold-font;
     color:#8e989f;
-    border-right:1px solid #cacad2;
+    border-right:1px solid $border-grey;
     display: inline-block;
     padding:12px 16px;
     &:hover{
@@ -139,14 +144,14 @@ a:visited{
 }
 .datagrid-container{
   @include border-radius(3px);
-  border:1px solid #cacad2;
+  border:1px solid $border-grey;
   height:292px;
   overflow-y: scroll;
 }
 .datagrid-table{
     width:100%;
     col.current-column{
-      background-color:darken(#f8f8f8, 2%);
+      @extend %highlight-cell;
     }
 }
 .datagrid-table-head{
@@ -154,7 +159,7 @@ a:visited{
 }
 .datagrid-table-head-cell{
   @extend %bold-font;
-  border-bottom:1px solid #cacad2;
+  border-bottom:1px solid $border-grey;
   padding:10px;
   text-align:left;
   &.numerical{
@@ -172,13 +177,17 @@ a:visited{
         visibility: hidden;
         clear: both;
     }
-    &:hover{
-      background-color:darken(#f8f8f8, 2%);
+    &:hover .datagrid-table-cell{
+      @extend %highlight-cell;
     }
     &:nth-child(even){
-      background-color:#f8f8f8;
-      &:hover{
-        background-color:darken(#f8f8f8, 2%);
+      .datagrid-table-cell{
+        background-color:rgba($grey2, .8);
+      }
+      &:hover {
+        .datagrid-table-cell{
+          @extend %highlight-cell;
+        }
       }
     }
 }
@@ -194,7 +203,7 @@ a:visited{
       color:#a00;
     }
   }
-  &.column{
-    background-color:darken(#f8f8f8, 5%);
+  &.current-column{
+    background-color:darken($grey2, 5%);
   }
 }

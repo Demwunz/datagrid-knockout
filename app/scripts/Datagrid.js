@@ -13,7 +13,7 @@ define([
             //knockout UI
             self.headers = ko.observableArray([]);
             self.rows = ko.observableArray([]);
-            self.column = ko.observable(null);
+            self.column = ko.observable(0);
 
             var GridCell = function(text, value, column){
                     this.text = text;
@@ -110,13 +110,27 @@ define([
                 //once the custom Array is built, populate the UI
                 self.headers(headersArray);
                 self.rows(rowsArray);
+                bindEvents();
             };
 
             var setGridCell = function setGridCell(cell){
                 var value = cell.gs$cell.numericValue ? parseFloat(cell.gs$cell.numericValue) : cell.gs$cell.$t;
                 return new GridCell(cell.gs$cell.$t, value, cell.gs$cell.col);
             };
-
+            var bindEvents = function bindEvents(){
+                bean.on(document.getElementById('datagrid'), {
+                    mouseover : function(event){
+                        var cell = event.target,
+                            column = cell.getAttribute('data-column');
+                        if(self.column() !== column){
+                            self.column(column);
+                        };
+                    },
+                    mouseout : function(event){
+                        self.column(null);
+                    }
+                });
+            }
             self.sortColumn = function sortColumn(data){
                 var column = data.column;
                 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
@@ -139,6 +153,7 @@ define([
                 }
                 sort = column;
             };
+
         };
     }
 );

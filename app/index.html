@@ -39,10 +39,10 @@
                             <li class="datagrid-nav-item"><a href="/">My Profile</a></li>
                         </ul>
                     </nav>
-                    <div id="datagrid" class="datagrid-container">
-                        <table cellspacing="0" cellpadding="0" class="datagrid-table">
+                    <div class="datagrid-container">
+                        <table cellspacing="0" cellpadding="0" class="datagrid-table" id="datagrid">
                             <colgroup data-bind="foreach: headers">
-                                <col data-bind="css: {'current-column' : $root.column() === $index()}">
+                                <col data-bind="css: {'current-column' : $root.column() == $index()}">
                             </colgroup>
                             <thead class="datagrid-table-head">
                                 <tr data-bind="template: { name: 'headerTmpl', foreach: headers}"></tr>
@@ -57,13 +57,13 @@
         <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
         <!-- endbuild -->
         <script id="headerTmpl" type="text/html">
-            <th data-bind="text: title, event : {click : $root.sortColumn}, css: {'numerical' : numerical}" class="datagrid-table-head-cell"></th>
+            <th data-bind="text: title, event : {click : $root.sortColumn}, css: {'numerical' : numerical}, attr: {'data-column': column}" class="datagrid-table-head-cell"></th>
         </script>
         <script id="rowTmpl" type="text/html">
             <tr data-bind="template: { name: 'cellTmpl', foreach: $data}" class="datagrid-table-row"></tr>
         </script>
         <script id="cellTmpl" type="text/html">
-            <td data-bind="text: setFormattedText(), attr: {'class': setCellClass()}"></td>
+            <td data-bind="text: setFormattedText(), attr: {'class': setCellClass(), 'data-column': column}"></td>
         </script>
 </body>
 </html>
