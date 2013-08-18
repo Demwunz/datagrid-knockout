@@ -2,8 +2,7 @@
 define([
     'bean',
     'reqwest',
-    'knockout',
-    'lib/knockout-delegatedEvents'],
+    'knockout'],
     function (bean, reqwest, ko) {
         'use strict';
 
@@ -16,17 +15,13 @@ define([
             self.rows = ko.observableArray([]);
             self.column = ko.observable(null);
 
-            var GridRow = function(){
-                    this.cells = [];
-                    return this.cells;
-                },
-                GridCell = function(text, value, column){
+            var GridCell = function(text, value, column){
                     this.text = text;
                     this.value = value,
                     this.column = column;
                 };
 
-            GridCell.prototype.getFormattedText = function(){
+            GridCell.prototype.setFormattedText = function(){
                 var cell = this,
                     text = cell.text,
                     firstSymbol = text.charAt(0),
@@ -37,9 +32,8 @@ define([
                     };
 
                 if(!isNaN(cell.value)) {
-                    //http://stackoverflow.com/a/3884711/542369
                     if(isNaN(lastSymbol)) {
-                        return addCommas(parseFloat(text.split(text.length-1)[0]).toFixed(2)) + lastSymbol;
+                        return addCommas(parseFloat(text.split(lastSymbol)[0]).toFixed(2)) + lastSymbol;
                     } else if(isNaN(firstSymbol)) {
                         return firstSymbol + addCommas(parseFloat(text.split(firstSymbol)[1]).toFixed(2));
                     } else {
@@ -50,7 +44,7 @@ define([
                 }
             };
 
-            GridCell.prototype.getCellClass = function(){
+            GridCell.prototype.setCellClass = function(){
                 var cell = this,
                     classes = ['datagrid-table-cell'];
                 if(!isNaN(cell.value)){
@@ -64,6 +58,14 @@ define([
                     }
                 }
                 return classes.join(' ');
+            };
+
+            GridCell.prototype.getValue = function(){
+                if(isNaN(this.value)){
+                    return this.value;
+                } else{
+                    return parseFloat(this.value);
+                }
             };
 
             //get the data asap
@@ -85,8 +87,8 @@ define([
             })();
 
             var setRows = function setRows(cells){
-                var rowsArray = [];
-                var headersArray = [];
+                var rowsArray = [],
+                    headersArray = [];
                 //go over each cell and determine where to put it
 
                 cells.forEach(function(cell, index){
@@ -96,18 +98,20 @@ define([
                     if(cellRow == '1') {
                         headersArray.push({title: cell.gs$cell.$t, column : cellCol, numerical : false});
                     } else {
+                        //fixed the column header alignment
+                        if(cellRow == '2'){
+                            if(cell.gs$cell.numericValue){
+                                headersArray[cellCol].numerical = true;
+                            }
+                        }
+                        //rejig the index, don't need empty cells
                         cellRow-=2;
                         //create a row if it doesnt already exist
                         if(!rowsArray[cellRow]) {
-                            rowsArray[cellRow] = new GridRow();
+                            rowsArray[cellRow] = [];
                         }
                         //push the cell into the row
                         rowsArray[cellRow][cellCol] = setGridCell(cell);
-                    }
-                    if(cellRow == '2'){
-                        if(cell.gs$cell.numericValue){
-                            headersArray[cellCol].numerical = true;
-                        }
                     }
                 });
 
@@ -125,8 +129,9 @@ define([
                 var column = data.column;
                 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
                 self.rows.sort(function(a,b) {
-                    var aValue = a[column].value,
-                        bValue = b[column].value;
+                    var aValue = a[column].getValue(),
+                        bValue = b[column].getValue();
+
                     if (aValue > bValue) {
                         return 1;
                     } else if (aValue < bValue) {

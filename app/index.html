@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>DataGrid</title>
-        <meta name="description" content="Reuters Test">
+        <meta name="description" content="DataGrid">
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="styles/main.css">
     </head>
@@ -14,7 +14,7 @@
                 <div  class="datagrid-bar">
                     <p>DataGrid Control Panel</p>
                 </div>
-                <main class="datagrid-main">
+                <div class="datagrid-main">
                     <header class="datagrid-header">
                         <div>
                             <h1 class="datagrid-logo">Data<span>Grid</span></h1>
@@ -42,7 +42,7 @@
                     <div id="datagrid" class="datagrid-container">
                         <table cellspacing="0" cellpadding="0" class="datagrid-table">
                             <colgroup data-bind="foreach: headers">
-                                <col>
+                                <col data-bind="css: {'current-column' : $root.column() === $index()}">
                             </colgroup>
                             <thead class="datagrid-table-head">
                                 <tr data-bind="template: { name: 'headerTmpl', foreach: headers}"></tr>
@@ -50,7 +50,7 @@
                             <tbody data-bind="template: { name: 'rowTmpl', foreach : rows}" class="datagrid-table-body"></tbody>
                         </table>
                     </div>
-                </main>
+                </div>
             </div>
         </div>
         <!-- build:js scripts/main.js -->
@@ -60,10 +60,10 @@
             <th data-bind="text: title, event : {click : $root.sortColumn}, css: {'numerical' : numerical}" class="datagrid-table-head-cell"></th>
         </script>
         <script id="rowTmpl" type="text/html">
-            <tr data-bind="template: { name: 'cellTmpl', foreach: $data}, delegatedHandler: ['mouseover', 'mouseout']" class="datagrid-table-row"></tr>
+            <tr data-bind="template: { name: 'cellTmpl', foreach: $data}" class="datagrid-table-row"></tr>
         </script>
         <script id="cellTmpl" type="text/html">
-            <td data-bind="text: getFormattedText(), attr: {'class': getCellClass()}"></td>
+            <td data-bind="text: setFormattedText(), attr: {'class': setCellClass()}"></td>
         </script>
 </body>
 </html>
