@@ -60,14 +60,6 @@ define([
                 return classes.join(' ');
             };
 
-            GridCell.prototype.getValue = function(){
-                if(isNaN(this.value)){
-                    return this.value;
-                } else{
-                    return parseFloat(this.value);
-                }
-            };
-
             //get the data asap
             (function getData(){
                 reqwest({
@@ -129,8 +121,8 @@ define([
                 var column = data.column;
                 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
                 self.rows.sort(function(a,b) {
-                    var aValue = a[column].getValue(),
-                        bValue = b[column].getValue();
+                    var aValue = a[column].value,
+                        bValue = b[column].value;
 
                     if (aValue > bValue) {
                         return 1;
