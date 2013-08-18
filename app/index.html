@@ -57,7 +57,7 @@
         <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
         <!-- endbuild -->
         <script id="headerTmpl" type="text/html">
-            <th data-bind="text: text, event : {click : sortColumn}, attr: {'class': cellClass}"></th>
+            <th data-bind="text: text, event : {click : sortColumn}, attr: {'class': cellClass, 'data-column': column}"></th>
         </script>
         <script id="rowTmpl" type="text/html">
             <tr data-bind="template: { name: 'cellTmpl', foreach: $data}" class="datagrid-table-row"></tr>

@@ -45,11 +45,11 @@ define([
                 this.base = TableCell;
                 this.base(text, value, column);
                 this.cellClass = css || headCellClass;
-                this.sortColumn =function(){
+                this.sortColumn = function(){
                     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
                     self.rows.sort(function(a,b) {
-                        var aValue = a[column].value,
-                            bValue = b[column].value;
+                        var aValue = a[column].getValue(),
+                            bValue = b[column].getValue();
 
                         if (aValue > bValue) {
                             return 1;
@@ -67,11 +67,20 @@ define([
                     sort = column;
                 };
             };
+            HeadCell.prototype = new TableCell;
 
             var BodyCell = function(text, value, column, css){
                 this.base = TableCell;
                 this.base(text, value, column);
                 this.cellClass = css || bodyCellClass;
+            };
+            BodyCell.prototype = new TableCell;
+            BodyCell.prototype.getValue = function(){
+                if(this.text === this.value){
+                    return this.value;
+                } else{
+                    return parseFloat(this.value);
+                }
             };
 
             var NumericalCell = function(text, value, column){
@@ -101,9 +110,6 @@ define([
                 this.base = BodyCell;
                 this.base(formatNumber(), value, column, cellclass());
             };
-
-            HeadCell.prototype = new TableCell;
-            BodyCell.prototype = new TableCell;
             NumericalCell.prototype = new BodyCell;
 
             var setGridCell = function setGridCell(cell){
