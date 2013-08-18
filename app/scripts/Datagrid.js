@@ -8,59 +8,16 @@ define([
 
         return function DataGridViewModel(datasource){
             var self = this,
-                sort;
+                sort,
+                headCellClass = 'datagrid-table-head-cell',
+                bodyCellClass = 'datagrid-table-cell',
+                numberCellClass = 'datagrid-table-cell cell-type-number';
 
             //knockout UI
             self.headers = ko.observableArray([]);
             self.rows = ko.observableArray([]);
-            self.column = ko.observable(0);
+            self.column = ko.observable(null);
 
-            var GridCell = function(text, value, column){
-                    this.text = text;
-                    this.value = value,
-                    this.column = column;
-                };
-
-            GridCell.prototype.setFormattedText = function(){
-                var cell = this,
-                    text = cell.text,
-                    firstSymbol = text.charAt(0),
-                    lastSymbol = text.slice(-1),
-                    addCommas = function(value) {
-                        //http://stackoverflow.com/a/2901298/542369
-                        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    };
-
-                if(!isNaN(cell.value)) {
-                    if(isNaN(lastSymbol)) {
-                        return addCommas(parseFloat(text.split(lastSymbol)[0]).toFixed(2)) + lastSymbol;
-                    } else if(isNaN(firstSymbol)) {
-                        return firstSymbol + addCommas(parseFloat(text.split(firstSymbol)[1]).toFixed(2));
-                    } else {
-                        return addCommas(parseFloat(text).toFixed(2));
-                    }
-                } else {
-                    return text;
-                }
-            };
-
-            GridCell.prototype.setCellClass = function(){
-                var cell = this,
-                    classes = ['datagrid-table-cell'];
-                if(!isNaN(cell.value)){
-                    classes.push('cell-type-number');
-                    if(isNaN(cell.text.slice(-1))){
-                        if(parseFloat(cell.value) >= 0){
-                            classes.push('positive');
-                        } else {
-                            classes.push('negative');
-                        }
-                    }
-                }
-                return classes.join(' ');
-            };
-
-            //get the data asap
             (function getData(){
                 reqwest({
                     url: datasource,
@@ -73,12 +30,106 @@ define([
                         console.log(err);
                     },
                     success: function (response) {
-                        setRows(response.feed.entry);
+                        self.setRows(response.feed.entry);
                     }
                 });
             })();
 
-            var setRows = function setRows(cells){
+            var TableCell = function(text, value, column){
+                this.text = text;
+                this.value = value;
+                this.column = column;
+            };
+
+            var HeadCell = function(text, value, column, css){
+                this.base = TableCell;
+                this.base(text, value, column);
+                this.cellClass = css || headCellClass;
+                this.sortColumn =function(){
+                    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+                    self.rows.sort(function(a,b) {
+                        var aValue = a[column].value,
+                            bValue = b[column].value;
+
+                        if (aValue > bValue) {
+                            return 1;
+                        } else if (aValue < bValue) {
+                            return -1;
+                        } else {
+                            // a must be equal to b
+                            return 0;
+                        }
+                    });
+
+                    if(sort == column){
+                        self.rows.reverse();
+                    }
+                    sort = column;
+                };
+            };
+
+            var BodyCell = function(text, value, column, css){
+                this.base = TableCell;
+                this.base(text, value, column);
+                this.cellClass = css || bodyCellClass;
+            };
+
+            var NumericalCell = function(text, value, column){
+                var cell = this,
+                    firstSymbol = text.charAt(0),
+                    lastSymbol = text.slice(-1),
+                    cellclass = function(){
+                        if(isNaN(lastSymbol)){
+                            return (parseFloat(value) >= 0) ? numberCellClass + ' positive' : numberCellClass + ' negative';
+                        } else{
+                            return numberCellClass;
+                        }
+                    },
+                    formatNumber = function(){
+                        var addCommas = function(value) {
+                            //http://stackoverflow.com/a/2901298/542369
+                            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        };
+                        if(isNaN(lastSymbol)) {
+                            return addCommas(parseFloat(text.split(lastSymbol)[0]).toFixed(2)) + lastSymbol;
+                        } else if(isNaN(firstSymbol)) {
+                            return firstSymbol + addCommas(parseFloat(text.split(firstSymbol)[1]).toFixed(2));
+                        } else {
+                            return addCommas(parseFloat(text).toFixed(2));
+                        }
+                    };
+                this.base = BodyCell;
+                this.base(formatNumber(), value, column, cellclass());
+            };
+
+            HeadCell.prototype = new TableCell;
+            BodyCell.prototype = new TableCell;
+            NumericalCell.prototype = new BodyCell;
+
+            var setGridCell = function setGridCell(cell){
+                if(cell.gs$cell.numericValue){
+                    return new NumericalCell(cell.gs$cell.$t, cell.gs$cell.numericValue, cell.gs$cell.col);
+                } else {
+                    return new BodyCell(cell.gs$cell.$t, cell.gs$cell.$t, cell.gs$cell.col);
+                }
+            };
+
+            var bindEvents = function bindEvents(){
+                bean.on(document.getElementById('datagrid'), {
+                    mouseover : function(event){
+                        var cell = event.target,
+                            column = cell.getAttribute('data-column');
+                        if(self.column() !== column){
+                            self.column(column);
+                        };
+                    },
+                    mouseout : function(event){
+                        self.column(null);
+                    }
+                });
+            };
+
+            self.setRows = function setRows(cells){
                 var rowsArray = [],
                     headersArray = [];
                 //go over each cell and determine where to put it
@@ -88,12 +139,12 @@ define([
                         cellCol = cell.gs$cell.col-=1;
                     //if its less then the column count, must be the header (first row)
                     if(cellRow == '1') {
-                        headersArray.push({title: cell.gs$cell.$t, column : cellCol, numerical : false});
+                        headersArray[cellCol] = new HeadCell(cell.gs$cell.$t, false, cellCol);
                     } else {
                         //fixed the column header alignment
                         if(cellRow == '2'){
                             if(cell.gs$cell.numericValue){
-                                headersArray[cellCol].numerical = true;
+                                headersArray[cellCol].cellClass = headCellClass + ' numerical';
                             }
                         }
                         //rejig the index, don't need empty cells
@@ -112,48 +163,6 @@ define([
                 self.rows(rowsArray);
                 bindEvents();
             };
-
-            var setGridCell = function setGridCell(cell){
-                var value = cell.gs$cell.numericValue ? parseFloat(cell.gs$cell.numericValue) : cell.gs$cell.$t;
-                return new GridCell(cell.gs$cell.$t, value, cell.gs$cell.col);
-            };
-            var bindEvents = function bindEvents(){
-                bean.on(document.getElementById('datagrid'), {
-                    mouseover : function(event){
-                        var cell = event.target,
-                            column = cell.getAttribute('data-column');
-                        if(self.column() !== column){
-                            self.column(column);
-                        };
-                    },
-                    mouseout : function(event){
-                        self.column(null);
-                    }
-                });
-            }
-            self.sortColumn = function sortColumn(data){
-                var column = data.column;
-                //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-                self.rows.sort(function(a,b) {
-                    var aValue = a[column].value,
-                        bValue = b[column].value;
-
-                    if (aValue > bValue) {
-                        return 1;
-                    } else if (aValue < bValue) {
-                        return -1;
-                    } else {
-                        // a must be equal to b
-                        return 0;
-                    }
-                });
-
-                if(sort == column){
-                    self.rows.reverse();
-                }
-                sort = column;
-            };
-
         };
     }
 );
