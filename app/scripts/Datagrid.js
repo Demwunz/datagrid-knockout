@@ -111,7 +111,7 @@ define([
             BodyCell.prototype = new TableCell;
             //save some memory when sorting lots of items
             BodyCell.prototype.getValue = function(){
-                if(this.text === this.value){
+                if(isNaN(this.value)){
                     return this.value;
                 } else{
                     return parseFloat(this.value);
@@ -128,17 +128,17 @@ define([
                 feed.entry.forEach(function(cell, index){
                     var cellRow = cell.gs$cell.row,
                         cellCol = cell.gs$cell.col-=1;
-                    //if its less then the column count, must be the header (first row)
+                    //if cellRow is 1 then must be the header (first row)
                     if(cellRow == '1') {
                         headersArray[cellCol] = new HeadCell(cell.gs$cell.$t, false, cellCol);
                     } else {
-                        //fix the column header alignment
+                        //fix the column header text alignment
                         if(cellRow == '2'){
                             if(cell.gs$cell.numericValue){
                                 headersArray[cellCol].cellClass = headCellClass + ' numerical';
                             }
                         }
-                        //rejig the index, don't need empty cells
+                        //rejig the index as google spreadsheets starts from 1 & we removed 1 row for the header
                         cellRow-=2;
                         //create a row if it doesnt already exist
                         if(!rowsArray[cellRow]) {
