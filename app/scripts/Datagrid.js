@@ -8,10 +8,10 @@ define([
 
         return function DataGridViewModel(datasource){
             var self = this,
-                sort,
                 headCellClass = 'datagrid-table-head-cell',
                 bodyCellClass = 'datagrid-table-cell',
-                numberCellClass = 'datagrid-table-cell cell-type-number';
+                numberCellClass = 'datagrid-table-cell cell-type-number',
+                sort;
 
             //knockout UI
             self.headers = ko.observableArray([]);
@@ -152,6 +152,7 @@ define([
                 //once the custom arrays are built, populate the UI in one go.
                 self.headers(headersArray);
                 self.rows(rowsArray);
+
                 bindEvents();
             };
 

@@ -1,0 +1,35 @@
+# DataGrid Test
+
+### Demo
+
+### Data source
+
+[https://docs.google.com/spreadsheet/ccc?key=0Akt_os3oK7whdHlVWDl5Rk5TMkJHaW5mRm9kYjJKLXc#gid=0](https://docs.google.com/spreadsheet/ccc?key=0Akt_os3oK7whdHlVWDl5Rk5TMkJHaW5mRm9kYjJKLXc#gid=0)
+
+### Libraries used:
+
+- [RequireJS](http://www.requirejs.org/)
+- [Knockout](http://knockoutjs.com/)
+- [bean](https://github.com/fat/bean)
+- [reqwest](https://github.com/ded/reqwest)
+
+### Tools used:
+
+- [Yeoman](http://yeoman.io/)
+- [SublimeText](http://www.sublimetext.com/3)
+- [Compass](http://compass-style.org/)
+
+### Missing features
+
+- missing feature: table header triangles on column sorting
+ 	- reason: time constraints
+
+### Bugs
+
+column sorting only happens twice (ascending, descending).
+
+### What could have been done better
+
+- fixed table header on scroll.
+- flexbox rendering for layout.
+- more abstraction via requirejs. For example, the "table cell objects" could have been moved to their own file.

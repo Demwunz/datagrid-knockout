@@ -6,7 +6,7 @@ require.config({
     }
 });
 
-require(['DataGrid','knockout'], function (DataGridViewModel, ko) {
+require(['DataGrid', 'knockout'], function (DataGridViewModel, ko) {
     'use strict';
     var __SPREADSHEET = '0Akt_os3oK7whdHlVWDl5Rk5TMkJHaW5mRm9kYjJKLXc',
         __SHEET = 'od6',
