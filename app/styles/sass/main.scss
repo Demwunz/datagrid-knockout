@@ -31,18 +31,18 @@ a:visited{
   color:#767f85;
 }
 .container{
-  @include display-box;
-  @include box-orient(horizontal);
-  @include box-align(center);
-  @include box-sizing(content-box);
-  @include box-pack(center);
+  width:1045px;
   height:490px;
+  margin-top:-245px;
+  margin-left:-523px;
+  position:absolute;
+  top:50%;
+  left:50%;
 }
 #dialog{
   @include border-radius(5px);
   @include box-shadow(#000 2px 2px 10px);
   background:$light-blue;
-  width:1045px;
   padding-bottom:1px;
 }
 .datagrid-bar{
@@ -61,11 +61,8 @@ a:visited{
   padding:21px;
 }
 .datagrid-logo{
-  margin:0;
-  text-transform: uppercase;
-  span{
-    color:$orange;
-  }
+  float:left;
+  margin:6px 0 0;
 }
 .datagrid-nav{
   @include border-radius(3px);
@@ -124,6 +121,15 @@ a:visited{
 .datagrid-aside{
   float:right;
   overflow: hidden;
+  input[type=search]{
+    @include appearance(none);
+    @include border-radius(3px);
+    border:1px solid #c5c5c5;
+    background:#fafafa;
+    outline:none;
+    padding:10px 5px;
+    min-width:220px;
+  }
 }
 .datagrid-global-links{
   overflow: hidden;
@@ -134,12 +140,13 @@ a:visited{
 }
 .datagrid-global-link{
   float:left;
+  padding-top:12px;
   &:first-child a{
     border-right:1px solid lighten(#767f85, 20%);
   }
   a{
     text-decoration:none;
-    padding:8px;
+    padding:0 8px;
   }
 }
 .datagrid-container{
