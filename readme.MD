@@ -1,5 +1,8 @@
 # DataGrid Test
 
+Development code is in app/  
+Production code is in dist/
+
 ### Demo
 
 [https://c9.io/demwunz_1/reuterstest/workspace/dist/index.html](https://c9.io/demwunz_1/reuterstest/workspace/dist/index.html)
@@ -37,3 +40,4 @@ column sorting only happens twice (ascending, descending).
 - flexbox rendering for layout.
 - more abstraction via requirejs. For example, the "table cell objects" could have been moved to their own file.
 - tests written
+- cleaner more structured sass file
