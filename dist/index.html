@@ -55,9 +55,9 @@
                 </div>
             </div>
         </div>
-        <script data-main="scripts/3f2971cd.main" src="bower_components/requirejs/require.js"></script>
+        <script data-main="scripts/7f109197.main" src="bower_components/requirejs/require.js"></script>
         <script id="headerTmpl" type="text/html">
-            <th data-bind="text: text, event : {click : sortColumn}, attr: {'class': cellClass, 'data-column': column}"></th>
+            <th data-bind="text: text, event : {click : $parent.sortColumn}, attr: {'class': cellClass, 'data-column': column}"></th>
         </script>
         <script id="rowTmpl" type="text/html">
             <tr data-bind="template: { name: 'cellTmpl', foreach: $data}" class="datagrid-table-row"></tr>
