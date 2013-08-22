@@ -76,6 +76,8 @@ define(['bean',
                 self.rows(rowsArray);
 
                 bindEvents();
+
+                document.getElementById('datagrid-container').removeChild(document.getElementById('loader'));
             };
 
             //determine if the cell is numerical or text

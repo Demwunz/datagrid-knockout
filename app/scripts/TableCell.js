@@ -1,4 +1,4 @@
-define(['DataGrid'], function (DataGrid) {
+define(['DataGrid'], function () {
         'use strict';
 
         var TableCell = function(text, value, column){

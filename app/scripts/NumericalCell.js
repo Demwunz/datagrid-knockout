@@ -28,7 +28,7 @@ define(['BodyCell'],
                     }
                 };
             this.base = BodyCell;
-            this.base(formatNumber(), value, column, cellclass());
+            this.base(formatNumber, value, column, cellclass);
         };
 
         NumericalCell.prototype = new BodyCell;

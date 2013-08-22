@@ -34,15 +34,13 @@ Production code is in dist/
 ### Bugs
 
 column sorting only happens twice (ascending, descending).  
-*update: fixed in commit [c595d62](https://bitbucket.org/demwunz/reuters/commits/c595d6255f01184fedeac5ee15178a59281283f9) - post test submission date. did for fun.*
+*update: fixed (after link was sent on Monday).*
 
 ### What could have been done better
 
 - fixed table header on scroll.
+- loading message to show status
+- search filter
 - flexbox rendering for layout.
-- more abstraction via requirejs. For example, the "table cell objects" could have been moved to their own file.
 - tests written
 - cleaner more structured sass file
-
-
-*update: I am going to build this in angular, this was a fun test!*

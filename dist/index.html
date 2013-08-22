@@ -41,7 +41,8 @@
                             <li class="datagrid-nav-item"><a href="javascript:void(0);">My Profile</a></li>
                         </ul>
                     </nav>
-                    <div class="datagrid-container">
+                    <div class="datagrid-container" id="datagrid-container">
+                        <span id="loader">Waiting for data from Google Spreadsheet</span>
                         <table cellspacing="0" cellpadding="0" class="datagrid-table" id="datagrid">
                             <colgroup data-bind="foreach: headers">
                                 <col data-bind="css: {'current-column' : $root.column() == $index()}">
@@ -55,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <script data-main="scripts/7f109197.main" src="bower_components/requirejs/require.js"></script>
+        <script data-main="scripts/8719d602.main" src="bower_components/requirejs/require.js"></script>
         <script id="headerTmpl" type="text/html">
             <th data-bind="text: text, event : {click : $parent.sortColumn}, attr: {'class': cellClass, 'data-column': column}"></th>
         </script>
