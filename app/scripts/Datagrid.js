@@ -1,12 +1,11 @@
 /*global define */
 define([
     'bean',
-    'reqwest',
     'knockout'],
-    function (bean, reqwest, ko) {
+    function (bean, ko) {
         'use strict';
 
-        return function DataGridViewModel(datasource){
+        return function DataGridViewModel(spreadsheet){
             var self = this,
                 headCellClass = 'datagrid-table-head-cell',
                 bodyCellClass = 'datagrid-table-cell',
@@ -18,24 +17,6 @@ define([
             self.headers = ko.observableArray([]);
             self.rows = ko.observableArray([]);
             self.column = ko.observable(null);
-
-            //get data
-            (function getData(){
-                reqwest({
-                    url: datasource,
-                    type: 'json',
-                    method: 'get',
-                    contentType: 'application/json',
-                    crossOrigin: true,
-                    withCredentials: false,
-                    error: function (err) {
-                        console.log(err);
-                    },
-                    success: function (response) {
-                        setRows(response.feed);
-                    }
-                });
-            })();
 
             //setup cell objects
             var TableCell = function(text, value, column){
@@ -189,6 +170,10 @@ define([
                     }
                 });
             };
+
+            if(spreadsheet){
+                setRows(spreadsheet);
+            }
         };
     }
 );
