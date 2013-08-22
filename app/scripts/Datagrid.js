@@ -11,7 +11,8 @@ define([
                 headCellClass = 'datagrid-table-head-cell',
                 bodyCellClass = 'datagrid-table-cell',
                 numberCellClass = 'datagrid-table-cell cell-type-number',
-                sort;
+                sortDirection = 0,
+                selectedColumn;
 
             //knockout UI
             self.headers = ko.observableArray([]);
@@ -49,12 +50,25 @@ define([
                 this.cellClass = css || headCellClass;
 
                 //expose sort column to the UI
-                this.sortColumn = function(){
-                    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-                    self.rows.sort(function(a,b) {
-                        var aValue = a[column].getValue(),
-                            bValue = b[column].getValue();
+                this.sortColumn = function(data){
 
+                    if(selectedColumn != column){
+                        sortDirection = 0;
+                        selectedColumn = column;
+                    } else {
+                        sortDirection++;
+                    }
+
+                    self.rows.sort(function(a,b) {
+                        var aValue, bValue;
+                        if(sortDirection % 2 === 0){
+                            aValue = a[column].getValue(),
+                            bValue = b[column].getValue();
+                        } else {
+                            aValue = b[column].getValue(),
+                            bValue = a[column].getValue();
+                        }
+                        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
                         if (aValue > bValue) {
                             return 1;
                         } else if (aValue < bValue) {
@@ -64,11 +78,6 @@ define([
                             return 0;
                         }
                     });
-
-                    if(sort == column){
-                        self.rows.reverse();
-                    }
-                    sort = column;
                 };
             };
 

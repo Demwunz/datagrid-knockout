@@ -31,13 +31,13 @@ a:visited{
   color:#767f85;
 }
 .container{
-  width:1045px;
-  height:490px;
-  margin-top:-245px;
-  margin-left:-523px;
   position:absolute;
   top:50%;
   left:50%;
+  margin-top:-245px;
+  margin-left:-523px;
+  width:1045px;
+  height:490px;
 }
 #dialog{
   @include border-radius(5px);
