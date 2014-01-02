@@ -1,6 +1,6 @@
 # DataGrid Test
 
-Development code is in app/  
+Development code is in app/
 Production code is in dist/
 
 
@@ -24,7 +24,6 @@ Production code is in dist/
 - [Yeoman](http://yeoman.io/)
 - [Compass](http://compass-style.org/)
 - [SublimeText](http://www.sublimetext.com/3)
-- [Cloud9 IDE](https://c9.io/demwunz_1/reuterstest)
 
 ### Missing features
 
