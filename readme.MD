@@ -6,7 +6,7 @@ Production code is in dist/
 
 ### Demo
 
-[https://c9.io/demwunz_1/reuterstest/workspace/dist/index.html](https://c9.io/demwunz_1/reuterstest/workspace/dist/index.html)
+[https://reuterstest.herokuapp.com/](https://reuterstest.herokuapp.com/)
 
 ### Data source
 
@@ -29,11 +29,6 @@ Production code is in dist/
 
 - missing feature: table header triangles on column sorting
  	- reason: time constraints
-
-### Bugs
-
-column sorting only happens twice (ascending, descending).  
-*update: fixed (after link was sent on Monday).*
 
 ### What could have been done better
 
