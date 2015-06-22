@@ -1,6 +1,6 @@
 require.config({
     paths: {
-        knockout : '../bower_components/knockout/build/output/knockout-latest',
+        knockout : '../bower_components/knockout/dist/knockout',
         reqwest : '../bower_components/reqwest/reqwest.min',
         bean : '../bower_components/bean/bean.min'
     },
