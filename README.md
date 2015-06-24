@@ -2,7 +2,7 @@
 
 ### Demo
 
-[http://reuters.fazal.io/](http://reuters.fazal.io/)
+[http://datagrid-knockout.fazal.io/](http://datagrid-knockout.fazal.io)
 
 ### Data source
 
