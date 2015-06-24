@@ -1,12 +1,8 @@
 # DataGrid Test
 
-Development code is in app/
-Production code is in dist/
-
-
 ### Demo
 
-[https://reuterstest.herokuapp.com/](https://reuterstest.herokuapp.com/)
+[http://reuters.fazal.io/](http://reuters.fazal.io/)
 
 ### Data source
 
@@ -21,9 +17,8 @@ Production code is in dist/
 
 ### Tools used:
 
-- [Yeoman](http://yeoman.io/)
-- [Compass](http://compass-style.org/)
-- [SublimeText](http://www.sublimetext.com/3)
+- [Grunt](http://gruntjs.com/)
+- [Surge](https://surge.sh/)
 
 ### Missing features
 
