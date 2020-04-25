@@ -1,5 +1,8 @@
 # DataGrid Test
 
+This was made for a technical test I had in 2013 for Reuters. I never got the job, but it was a fun little exersize.
+Reflecting back on this, it's interesting to see how some concepts from commonjs spec made it into ES6, knockout is dead (Vue is the natural successor)
+
 ### Demo
 
 [https://boring-fermat-3b1d77.netlify.app/](https://boring-fermat-3b1d77.netlify.app/)
@@ -16,20 +19,4 @@
 - [reqwest](https://github.com/ded/reqwest)
 
 ### Tools used:
-
-- [Grunt](http://gruntjs.com/)
-- [Surge](https://surge.sh/)
-
-### Missing features
-
-- missing feature: table header triangles on column sorting
- 	- reason: time constraints
-
-### What could have been done better
-
-- fixed table header on scroll.
-- loading message to show status
-- search filter
-- flexbox rendering for layout.
-- tests written
-- cleaner more structured sass file
+- [Netlify](https://www.netlify.com/)
