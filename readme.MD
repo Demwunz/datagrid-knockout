@@ -2,7 +2,7 @@
 
 ### Demo
 
-[http://datagrid-knockout.fazal.io/](http://datagrid-knockout.fazal.io)
+[https://boring-fermat-3b1d77.netlify.app/](https://boring-fermat-3b1d77.netlify.app/)
 
 ### Data source
 
